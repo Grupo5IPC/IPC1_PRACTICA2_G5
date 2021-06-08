@@ -15,7 +15,7 @@ public class Main {
     static String Ruta;
     static int Columnas, Filas;
 
-    public static void main(String[] args) {
+       public static void main(String[] args) {
         menuPrincipal();
     }
 
@@ -75,4 +75,44 @@ public class Main {
             System.out.println("Ejecuta el programa nuevamente");
         }
 
+    }
+
+    public static void CargarCursos(String Ruta) {
+        int Id, Codigo;
+        String Nombre;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine() + "\n";
+            }
+            String[] Rows = Data.split("\n");
+            Filas = Rows.length;
+
+            String[] Columns = Rows[0].split(",");
+            Columnas = Columns.length;
+
+            for (int i = 1; i < cursos.length; i++) {
+                Columns = Rows[i].split(",");
+
+                Id = Integer.parseInt(Columns[0]);
+                Codigo = Integer.parseInt(Columns[1]);
+                Nombre = Columns[2];
+
+                cursos[i] = new Curso(Id, Codigo, Nombre);
+            }
+            System.out.println("\nFueron ingresados: " + (Filas - 1) + " cursos");
+            
+            for (int i = 1; i < Filas; i++) {
+                System.out.println("\nId: " + String.valueOf(cursos[i].getId()));
+                System.out.println("Codigo: " + String.valueOf(cursos[i].getCodigo()));
+                System.out.println("Nombre: " + String.valueOf(cursos[i].getNombre()));
+            }
+            System.out.println("\n");
+            Reader.close();
+        } catch (Exception e) {
+        }
     }
