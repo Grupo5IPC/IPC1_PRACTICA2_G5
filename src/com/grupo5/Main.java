@@ -5,8 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
-import vacasp2_01.Alumnos.Alumno;
-import vacasp2_01.Profesores.Profesor;
+import IPC1_PRACTICA2_G5.Profesores.Profesor;
 
 public class VacasP2_01 {
 
