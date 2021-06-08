@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
-import IPC1_PRACTICA2_G5.Profesores.Profesor;
+import grupo5.Cursos.Curso;
 
-public class VacasP2_01 {
+public class Main {
 
     public static Scanner MenuPrincipal = new Scanner(System.in);
     public static Scanner escribirRuta = new Scanner(System.in);
-    public static Profesor[] profesores = new Profesor[20];
+    public static Curso[] cursos = new Curso[15];
     static String Ruta;
     static int Columnas, Filas;
 
@@ -48,14 +48,12 @@ public class VacasP2_01 {
 
                         case 2:
                             
-                            System.out.println("Ingrese la ruta del archivo: ");
-                            Ruta = escribirRuta.nextLine();
-                            CargarProfesores(Ruta);
-                            
                             break;
 
                         case 3:
-
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            CargarCursos(Ruta);
                             break;
 
                         case 8:
@@ -78,50 +76,3 @@ public class VacasP2_01 {
         }
 
     }
-
-    public static void CargarProfesores(String Ruta) {
-        int Id, Registro;
-        String Nombre, FechaNac, FechaCont, Genero;
-
-        try {
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
-
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine() + "\n";
-            }
-            String[] Rows = Data.split("\n");
-            Filas = Rows.length;
-
-            String[] Columns = Rows[0].split(",");
-            Columnas = Columns.length;
-
-            for (int i = 1; i < Filas; i++) {
-                Columns = Rows[i].split(",");
-
-                Id = Integer.parseInt(Columns[0]);
-                Registro = Integer.parseInt(Columns[1]);
-                Nombre = Columns[2];
-                FechaNac = Columns[3];
-                FechaCont = Columns[4];
-                Genero = Columns[5];
-
-                profesores[i] = new Profesor(Id, Registro, Nombre, FechaNac, FechaCont, Genero);
-            }
-            System.out.println("\nFueron ingresados: " + (Filas - 1) + " profesores");
-
-            for (int i = 1; i < Filas; i++) {
-                System.out.println("\nId: " + String.valueOf(profesores[i].getId()));
-                System.out.println("Registro: " + String.valueOf(profesores[i].getRegistro()));
-                System.out.println("Nombre: " + String.valueOf(profesores[i].getNombre()));
-                System.out.println("Fecha de Nacimiento: " + String.valueOf(profesores[i].getFecha_nacimiento()));
-                System.out.println("Fecha de Contratación: " + String.valueOf(profesores[i].getFecha_contratacion()));
-                System.out.println("Genero: " + String.valueOf(profesores[i].getGenero()));
-            }
-            System.out.println("\n");
-            Reader.close();
-        } catch (Exception e) {
-        }
-    }
-}
