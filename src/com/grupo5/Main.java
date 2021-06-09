@@ -6,6 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 import com.grupo5.Cursos.Curso;
+import com.grupo5.Alumnos.*;
+import com.grupo5.Cursos.*;
+import com.grupo5.Profesores.*;
+import com.grupo5.Usuarios.*;
 
 public class Main {
 
@@ -14,8 +18,15 @@ public class Main {
     public static Curso[] cursos = new Curso[15];
     static String Ruta;
     static int Columnas, Filas;
-
+    public static Gestor_alumno  gestor_alumno ;
+    public static Gestor_curso gestor_curso ;
+    public static Gestor_profesor gestor_profesor;
+    public static Gestor_usuarios gestor_usuarios;
     public static void main(String[] args) {
+        gestor_alumno = new Gestor_alumno();
+        gestor_curso = new Gestor_curso();
+        gestor_profesor = new Gestor_profesor();
+        gestor_usuarios = new Gestor_usuarios();
         menuPrincipal();
     }
 
