@@ -16,12 +16,15 @@ public class Main {
     public static Scanner MenuPrincipal = new Scanner(System.in);
     public static Scanner escribirRuta = new Scanner(System.in);
     public static Curso[] cursos = new Curso[15];
+    public static Profesor[] profesores = new Profesor[20];
+    public static Alumno[] alumnos = new Alumno[100];
     static String Ruta;
     static int Columnas, Filas;
     public static Gestor_alumno  gestor_alumno ;
     public static Gestor_curso gestor_curso ;
     public static Gestor_profesor gestor_profesor;
     public static Gestor_usuarios gestor_usuarios;
+    
     public static void main(String[] args) {
         gestor_alumno = new Gestor_alumno();
         gestor_curso = new Gestor_curso();
@@ -54,11 +57,15 @@ public class Main {
                     Opciones = MenuPrincipal.nextInt();
                     switch (Opciones) {
                         case 1:
-
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            CargarAlumnos(Ruta);
                             break;
 
                         case 2:
-
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            CargarProfesores(Ruta);
                             break;
 
                         case 3:
@@ -86,6 +93,57 @@ public class Main {
             System.out.println("Ejecuta el programa nuevamente");
         }
 
+    }
+
+       public static void CargarAlumnos(String Ruta) {
+        int Id, Carnet;
+        String Nombre, FechaNac, Genero;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String[] Rows = Data.split("\n");
+            Filas = Rows.length;
+
+            String[] Columns = Rows[0].split(",");
+            Columnas = Columns.length;
+
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                Id = Integer.parseInt(Columns[0]);
+                Carnet = Integer.parseInt(Columns[1]);
+                Nombre = Columns[2];
+                FechaNac = Columns[3];
+                Genero = Columns[4];
+
+                alumnos[Cont++] = new Alumno(Id, Carnet, Nombre, FechaNac, Genero);
+
+                if (alumnos[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            System.out.println("\nFueron ingresados: " + Cont + " alumnos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
+                System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
+                System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
+                System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
+                System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));
+            }
+            System.out.println("\n");
+            Reader.close();
+        } catch (Exception e) {
+        }
     }
 
     public static void CargarCursos(String Ruta) {
@@ -133,4 +191,56 @@ public class Main {
         } catch (Exception e) {
         }
     }
-}
+
+    public static void CargarProfesores(String Ruta) {
+        int Id, Registro;
+        String Nombre, FechaNac, FechaCont, Genero;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String[] Rows = Data.split("\n");
+            Filas = Rows.length;
+
+            String[] Columns = Rows[0].split(",");
+            Columnas = Columns.length;
+
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                Id = Integer.parseInt(Columns[0]);
+                Registro = Integer.parseInt(Columns[1]);
+                Nombre = Columns[2];
+                FechaNac = Columns[3];
+                FechaCont = Columns[4];
+                Genero = Columns[5];
+
+                profesores[Cont++] = new Profesor(Id, Registro, Nombre, FechaNac, FechaCont, Genero);
+
+                if (profesores[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            System.out.println("\nFueron ingresados: " + Cont + " alumnos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId: " + String.valueOf(profesores[i].getId()));
+                System.out.println("Registro: " + String.valueOf(profesores[i].getRegistro()));
+                System.out.println("Nombre: " + String.valueOf(profesores[i].getNombre()));
+                System.out.println("Fecha de Nacimiento: " + String.valueOf(profesores[i].getFecha_nacimiento()));
+                System.out.println("Fecha de Contratación: " + String.valueOf(profesores[i].getFecha_contratacion()));
+                System.out.println("Genero: " + String.valueOf(profesores[i].getGenero()));
+            }
+            System.out.println("\n");
+            Reader.close();
+        } catch (Exception e) {
+        }
+    }
