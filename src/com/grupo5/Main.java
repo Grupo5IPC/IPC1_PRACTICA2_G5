@@ -77,7 +77,7 @@ public class Main {
 
     }
 
-    public static void CargarCursos(String Ruta) {
+        public static void CargarCursos(String Ruta) {
         int Id, Codigo;
         String Nombre;
 
@@ -87,26 +87,32 @@ public class Main {
             String Data = "";
 
             while (Reader.hasNextLine()) {
-                Data += Reader.nextLine() + "\n";
+                Data += Reader.nextLine().replace(" ", "") + "\n";
             }
             String[] Rows = Data.split("\n");
             Filas = Rows.length;
 
             String[] Columns = Rows[0].split(",");
             Columnas = Columns.length;
-
-            for (int i = 1; i < cursos.length; i++) {
+            
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
                 Columns = Rows[i].split(",");
 
                 Id = Integer.parseInt(Columns[0]);
                 Codigo = Integer.parseInt(Columns[1]);
                 Nombre = Columns[2];
-
-                cursos[i] = new Curso(Id, Codigo, Nombre);
+                cursos[Cont++] = new Curso(Id, Codigo, Nombre);
+                
+                if (cursos[i] != null) {
+                    ++Cont2;
+                }
             }
-            System.out.println("\nFueron ingresados: " + (Filas - 1) + " cursos");
             
-            for (int i = 1; i < Filas; i++) {
+            System.out.println("\nFueron ingresados: " + Cont + " cursos");
+            
+            for (int i = 0; i < Filas; i++) {
                 System.out.println("\nId: " + String.valueOf(cursos[i].getId()));
                 System.out.println("Codigo: " + String.valueOf(cursos[i].getCodigo()));
                 System.out.println("Nombre: " + String.valueOf(cursos[i].getNombre()));
