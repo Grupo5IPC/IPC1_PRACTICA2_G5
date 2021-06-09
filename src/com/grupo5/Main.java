@@ -19,6 +19,7 @@ public class Main {
     public static Profesor[] profesores = new Profesor[20];
     public static Alumno[] alumnos = new Alumno[100];
     static Asignacion_alumno[] Asignar = new Asignacion_alumno[alumnos.length];
+    static Asignacion_prof[] Asignar2 = new Asignacion_prof[profesores.length];
     static String Ruta;
     static int Columnas, Filas, IdAlumno, IdCurso, IdProfesor, Nota;
     public static Gestor_alumno  gestor_alumno ;
@@ -296,4 +297,48 @@ public class Main {
 
         }
     }
-    }
+        
+        public static void AsignarProfesores(String Ruta) {
+        int IdProfesor1 = IdProfesor;
+        int IdCurso1 = IdCurso;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String Rows[] = Data.split("\n");
+            Filas = Rows.length;
+
+            String Columns[] = Rows[0].split(",");
+            Columnas = Columns.length;
+            
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                IdProfesor1 = Integer.parseInt(Columns[0]);
+                IdCurso1 = Integer.parseInt(Columns[1]);
+
+                Asignar2[Cont++] = new Asignacion_prof(IdProfesor1, IdCurso1);
+                
+                if (Asignar2[i] != null) {
+                    ++Cont2;
+                }
+            }
+            System.out.println("\nFueron asignados: " + Cont + " profesores a sus cursos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId del Profesor: " + String.valueOf(Asignar2[i].getId_prof()));
+                System.out.println("Id del Curso: " + String.valueOf(Asignar2[i].getId_curso()));
+            }
+            Reader.close();
+        } catch (Exception e) {
+
+        }
+    }      
+}
