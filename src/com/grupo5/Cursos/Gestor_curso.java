@@ -18,7 +18,7 @@ public class Gestor_curso {
     }
 
     public boolean Ins_curso(int id, int codigo, String Nombre) {
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 15; i++) {
             if (cursos[i] == null) {
                 cursos[i] = new Curso(id,codigo, Nombre);
                 return true;
@@ -29,7 +29,7 @@ public class Gestor_curso {
 
     public boolean verificar_curso(int id) {
         boolean s = false;
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 15; i++) {
             if (cursos[0] == null) {
                 return true;
             } else {
@@ -48,7 +48,7 @@ public class Gestor_curso {
 
     public void print_cursos() {
         System.out.println("Cursos:");
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 15; i++) {
             if (cursos[i] != null) {
 
                 System.out.print(cursos[i].getId() + ",");
@@ -60,7 +60,7 @@ public class Gestor_curso {
     }
     public String buscar_nombre_clase(int id){
         String nombre="";
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 15; i++) {
             
                 if (cursos[i] != null) {
                     if (cursos[i].getId() == id) {
@@ -73,7 +73,7 @@ public class Gestor_curso {
     }
     public int verificar_cant(){
         int cantidad = 0;
-        for (int i = 0; i < 30;i++) {
+        for (int i = 0; i < 15;i++) {
             if (cursos[i]!= null) {
                  
                     cantidad++;

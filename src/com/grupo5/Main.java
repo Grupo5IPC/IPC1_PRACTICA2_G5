@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
-import grupo5.Cursos.Curso;
+import com.grupo5.Cursos.Curso;
 
 public class Main {
 
@@ -15,7 +15,7 @@ public class Main {
     static String Ruta;
     static int Columnas, Filas;
 
-       public static void main(String[] args) {
+    public static void main(String[] args) {
         menuPrincipal();
     }
 
@@ -47,7 +47,7 @@ public class Main {
                             break;
 
                         case 2:
-                            
+
                             break;
 
                         case 3:
@@ -77,7 +77,7 @@ public class Main {
 
     }
 
-        public static void CargarCursos(String Ruta) {
+    public static void CargarCursos(String Ruta) {
         int Id, Codigo;
         String Nombre;
 
@@ -94,7 +94,7 @@ public class Main {
 
             String[] Columns = Rows[0].split(",");
             Columnas = Columns.length;
-            
+
             int Cont = 0;
             int Cont2 = 0;
             for (int i = 1; i < Filas; i++) {
@@ -104,14 +104,14 @@ public class Main {
                 Codigo = Integer.parseInt(Columns[1]);
                 Nombre = Columns[2];
                 cursos[Cont++] = new Curso(Id, Codigo, Nombre);
-                
+
                 if (cursos[i] != null) {
                     ++Cont2;
                 }
             }
-            
+
             System.out.println("\nFueron ingresados: " + Cont + " cursos");
-            
+
             for (int i = 0; i < Filas; i++) {
                 System.out.println("\nId: " + String.valueOf(cursos[i].getId()));
                 System.out.println("Codigo: " + String.valueOf(cursos[i].getCodigo()));
@@ -122,3 +122,4 @@ public class Main {
         } catch (Exception e) {
         }
     }
+}

@@ -19,7 +19,7 @@ public class Gestor_usuarios {
     }
 
     public boolean Ins_usu(String nombre, String pass) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
 
             if (usuarios[i] == null) {
                 usuarios[i] = new Usuario(nombre, pass);
@@ -30,7 +30,7 @@ public class Gestor_usuarios {
     }
 
     public void print_usu() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             if (usuarios[i] != null) {
                 System.out.print(usuarios[i].getUsuario());
                 System.out.println(usuarios[i].getPassword());
@@ -41,7 +41,7 @@ public class Gestor_usuarios {
     }
 
     public boolean verificar(String usu, String pass) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             if (usuarios[i] != null) {
                 if ((usuarios[i].getUsuario().equals(usu)) && (usuarios[i].getPassword().equals(pass))) {
                     return true;
@@ -52,7 +52,7 @@ public class Gestor_usuarios {
     }
 
     public boolean verificar_exis(String usu) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             if (usuarios[i] != null) {
                 if ((usuarios[i].getUsuario().equals(usu))) {
                     return true;
@@ -64,7 +64,7 @@ public class Gestor_usuarios {
 
     public int verificar_cant() {
         int cantidad = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             if (usuarios[i] != null) {
 
                 cantidad++;
@@ -76,7 +76,7 @@ public class Gestor_usuarios {
 
     public String buscar_nombre_USU(String nom) {
         String nombre = "";
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
 
             if (usuarios[i] != null) {
                 if (usuarios[i].getUsuario().equals(nom)) {
@@ -90,7 +90,7 @@ public class Gestor_usuarios {
 
     public String buscar_contra(String nom) {
         String nombre = "";
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
 
             if (usuarios[i] != null) {
                 if (usuarios[i].getUsuario().equals(nom)) {

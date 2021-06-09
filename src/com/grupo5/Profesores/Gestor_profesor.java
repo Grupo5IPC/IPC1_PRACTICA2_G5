@@ -20,7 +20,7 @@ public class Gestor_profesor {
     }
 
     public boolean Ins_prof(int id, int registro,String nombre,String fecha_nacimiento,String fecha_contratacion, String genero) {
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 20; i++) {
             if (profesores[i] == null) {
                 profesores[i] = new Profesor(id, registro, nombre, fecha_nacimiento, fecha_contratacion, genero);
                 return true;
@@ -31,7 +31,7 @@ public class Gestor_profesor {
 
     public boolean verificar_prof(int id) {
         boolean s = false;
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 20; i++) {
             if (profesores[0] == null) {
                
                 return true;
@@ -52,7 +52,7 @@ public class Gestor_profesor {
 
     public void print_profesores() {
         System.out.println("Profesores en el sistema:");
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 20; i++) {
             if (profesores[i] != null) {
 
                 System.out.print(profesores[i].getId() + ",");
@@ -64,7 +64,7 @@ public class Gestor_profesor {
         }
     }
     public boolean asginar_curso(int id_a, int id_c) {
-        for (int i = 0; i < 75; i++) {
+        for (int i = 0; i < 30; i++) {
             if (asignaciones[i] == null) {
                 asignaciones[i] = new Asignacion_prof(id_a, id_c);
                 return true;
@@ -75,7 +75,7 @@ public class Gestor_profesor {
 
     public boolean verificar_asign(int id_a, int id_c) {
         boolean s = false;
-        for (int i = 0; i < 75; i++) {
+        for (int i = 0; i < 30; i++) {
             if (asignaciones[0] == null) {
                 s = true;
                 return s;
@@ -98,7 +98,7 @@ public class Gestor_profesor {
     
     public int verificar_cant_asign(int id_a){
         int curso = 0;
-        for (int i = 0; i < 75; i++) {
+        for (int i = 0; i < 30; i++) {
             if (asignaciones[i]!= null) {
                 if (asignaciones[i].getId_prof() == id_a) {
                     curso++;
@@ -109,7 +109,7 @@ public class Gestor_profesor {
     }
     public void print_asig(){
         System.out.println("Profesor y cursos asignados:");
-        for (int i = 0; i < 75; i++) {
+        for (int i = 0; i < 30; i++) {
             if (asignaciones[i] != null) {
 
                 System.out.print(asignaciones[i].getId_prof()+ ",");
@@ -130,7 +130,7 @@ public class Gestor_profesor {
     }
     public int cantidad_filas(){
         int cant =0;
-        for (int i = 0; i < 75; i++) {
+        for (int i = 0; i < 30; i++) {
             if (asignaciones[i] != null) {
                 cant++;
                 
@@ -202,7 +202,7 @@ public class Gestor_profesor {
      */
     public String buscar_nombre_prof(int id){
         String nombre="";
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 20; i++) {
             
                 if (profesores[i] != null) {
                     if (profesores[i].getId() == id) {
@@ -215,7 +215,7 @@ public class Gestor_profesor {
     }
     public int verificar_cant(){
         int cantidad = 0;
-        for (int i = 0; i < 25;i++) {
+        for (int i = 0; i < 20;i++) {
             if (profesores[i]!= null) {
                  
                     cantidad++;
