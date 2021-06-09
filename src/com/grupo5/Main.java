@@ -18,8 +18,8 @@ public class Main {
     public static Curso[] cursos = new Curso[15];
     public static Profesor[] profesores = new Profesor[20];
     public static Alumno[] alumnos = new Alumno[100];
-    static Asignacion_alumno[] Asignar = new Asignacion_alumno[alumnos.length];
-    static Asignacion_prof[] Asignar2 = new Asignacion_prof[profesores.length];
+    static Asignacion_alumno[] Asignar = new Asignacion_alumno[200];
+    static Asignacion_prof[] Asignar2 = new Asignacion_prof[30];
     static String Ruta;
     static int Columnas, Filas, IdAlumno, IdCurso, IdProfesor, Nota;
     public static Gestor_alumno gestor_alumno;
@@ -43,7 +43,7 @@ public class Main {
             System.out.println("*******************************");
             System.out.println("* Ingrese su usuario          *");
             String user = MenuPrincipal.nextLine();
-            System.out.println("* Ingrese su contraseña       *");
+            System.out.println("* Ingrese su contraseÃ±a       *");
             String pass = MenuPrincipal.nextLine();
             System.out.println("*******************************");
             int Opciones = 0;
@@ -51,7 +51,7 @@ public class Main {
                 do {
                     try {
                         System.out.println("*******************************");
-                        System.out.println("*       MENÚ PRINCIPAL        *");
+                        System.out.println("*       MENÃš PRINCIPAL        *");
                         System.out.println("*******************************");
                         System.out.println("* 1) Cargar Alumnos           *");
                         System.out.println("* 2) Cargar Profesores        *");
@@ -66,18 +66,34 @@ public class Main {
                         Opciones = MenuPrincipal.nextInt();
                         switch (Opciones) {
                             case 1:
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            CargarAlumnos(Ruta);
+                            break;
 
-                                break;
+                        case 2:
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            CargarProfesores(Ruta);
+                            break;
 
-                            case 2:
+                        case 3:
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            CargarCursos(Ruta);
+                            break;
 
-                                break;
-
-                            case 3:
-                                System.out.println("Ingrese la ruta del archivo: ");
-                                Ruta = escribirRuta.nextLine();
-                                CargarCursos(Ruta);
-                                break;
+                        case 4:
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            AsignarAlumnos(Ruta);
+                            break;
+                            
+                        case 5:
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            AsignarProfesores(Ruta);
+                            break;
 
                             case 7:
                                 NuevoUser();
@@ -88,19 +104,19 @@ public class Main {
                                 break;
 
                             default:
-                                System.out.println("Advertencia: Debes elegir una opción de 1 a x");
+                                System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
                                 break;
                         }
                     } catch (Exception e) {
                         MenuPrincipal = new Scanner(System.in);
-                        System.out.println("Advertencia: Debes elegir una opción de 1 a x");
+                        System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
                     }
                 } while (Opciones != 8);
             } else if (gestor_usuarios.verificar(user, pass)) {
                 do {
                     try {
                         System.out.println("*************************************");
-                        System.out.println("*           MENÚ PRINCIPAL          *");
+                        System.out.println("*           MENÃš PRINCIPAL          *");
                         System.out.println("*************************************");
                         System.out.println("* 1) Reporte de Alumnos             *");
                         System.out.println("* 2) Reporte asignacion Alumnos     *");
@@ -130,17 +146,17 @@ public class Main {
                                 break;
 
                             default:
-                                System.out.println("Advertencia: Debes elegir una opción de 1 a x");
+                                System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
                                 break;
                         }
                     } catch (Exception e) {
                         MenuPrincipal = new Scanner(System.in);
-                        System.out.println("Advertencia: Debes elegir una opción de 1 a x");
+                        System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
                     }
                 } while (Opciones != 8);
             }
         } catch (Exception e) {
-            System.out.println("Has hecho una acción no valida,");
+            System.out.println("Has hecho una acciÃ³n no valida,");
             System.out.println("Ejecuta el programa nuevamente");
         }
     }
@@ -154,10 +170,10 @@ public class Main {
         System.out.println("* Ingrese el nuevo usuario    *");
         Scanner nombreUsuario = new Scanner(System.in);
         String nuser = nombreUsuario.nextLine();
-        System.out.println("* Ingrese una contraseña      *");
+        System.out.println("* Ingrese una contraseÃ±a      *");
         Scanner passUsuario = new Scanner(System.in);
         String npass = passUsuario.nextLine();
-        System.out.println("* Confirmar contraseña        *");
+        System.out.println("* Confirmar contraseÃ±a        *");
         Scanner confirmarPass = new Scanner(System.in);
         String npass2 = confirmarPass.nextLine();
         System.out.println("*******************************");
@@ -172,6 +188,57 @@ public class Main {
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 
+   public static void CargarAlumnos(String Ruta) {
+        int Id, Carnet;
+        String Nombre, FechaNac, Genero;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String[] Rows = Data.split("\n");
+            Filas = Rows.length;
+
+            String[] Columns = Rows[0].split(",");
+            Columnas = Columns.length;
+
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                Id = Integer.parseInt(Columns[0]);
+                Carnet = Integer.parseInt(Columns[1]);
+                Nombre = Columns[2];
+                FechaNac = Columns[3];
+                Genero = Columns[4];
+
+                alumnos[Cont++] = new Alumno(Id, Carnet, Nombre, FechaNac, Genero);
+
+                if (alumnos[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            System.out.println("\nFueron ingresados: " + Cont + " alumnos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
+                System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
+                System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
+                System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
+                System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));
+            }
+            System.out.println("\n");
+            Reader.close();
+        } catch (Exception e) {
+        }
+    }
+
     public static void CargarCursos(String Ruta) {
         int Id, Codigo;
         String Nombre;
@@ -182,7 +249,7 @@ public class Main {
             String Data = "";
 
             while (Reader.hasNextLine()) {
-                Data += Reader.nextLine() + "\n";
+                Data += Reader.nextLine().replace(" ", "") + "\n";
             }
             String[] Rows = Data.split("\n");
             Filas = Rows.length;
@@ -190,18 +257,24 @@ public class Main {
             String[] Columns = Rows[0].split(",");
             Columnas = Columns.length;
 
-            for (int i = 1; i < cursos.length; i++) {
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
                 Columns = Rows[i].split(",");
 
                 Id = Integer.parseInt(Columns[0]);
                 Codigo = Integer.parseInt(Columns[1]);
                 Nombre = Columns[2];
+                cursos[Cont++] = new Curso(Id, Codigo, Nombre);
 
-                cursos[i] = new Curso(Id, Codigo, Nombre);
+                if (cursos[i] != null) {
+                    ++Cont2;
+                }
             }
-            System.out.println("\nFueron ingresados: " + (Filas - 1) + " cursos");
 
-            for (int i = 1; i < Filas; i++) {
+            System.out.println("\nFueron ingresados: " + Cont + " cursos");
+
+            for (int i = 0; i < Filas; i++) {
                 System.out.println("\nId: " + String.valueOf(cursos[i].getId()));
                 System.out.println("Codigo: " + String.valueOf(cursos[i].getCodigo()));
                 System.out.println("Nombre: " + String.valueOf(cursos[i].getNombre()));
@@ -209,6 +282,149 @@ public class Main {
             System.out.println("\n");
             Reader.close();
         } catch (Exception e) {
+        }
+    }
+
+    public static void CargarProfesores(String Ruta) {
+        int Id, Registro;
+        String Nombre, FechaNac, FechaCont, Genero;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String[] Rows = Data.split("\n");
+            Filas = Rows.length;
+
+            String[] Columns = Rows[0].split(",");
+            Columnas = Columns.length;
+
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                Id = Integer.parseInt(Columns[0]);
+                Registro = Integer.parseInt(Columns[1]);
+                Nombre = Columns[2];
+                FechaNac = Columns[3];
+                FechaCont = Columns[4];
+                Genero = Columns[5];
+
+                profesores[Cont++] = new Profesor(Id, Registro, Nombre, FechaNac, FechaCont, Genero);
+
+                if (profesores[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            System.out.println("\nFueron ingresados: " + Cont + " alumnos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId: " + String.valueOf(profesores[i].getId()));
+                System.out.println("Registro: " + String.valueOf(profesores[i].getRegistro()));
+                System.out.println("Nombre: " + String.valueOf(profesores[i].getNombre()));
+                System.out.println("Fecha de Nacimiento: " + String.valueOf(profesores[i].getFecha_nacimiento()));
+                System.out.println("Fecha de ContrataciÃ³n: " + String.valueOf(profesores[i].getFecha_contratacion()));
+                System.out.println("Genero: " + String.valueOf(profesores[i].getGenero()));
+            }
+            System.out.println("\n");
+            Reader.close();
+        } catch (Exception e) {
+        }
+    }
+
+    public static void AsignarAlumnos(String Ruta) {
+        int IdAlumno1 = IdAlumno;
+        int IdCurso1 = IdCurso;
+        double Nota1 = 0.0;
+        Nota1 = Nota;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String Rows[] = Data.split("\n");
+            Filas = Rows.length;
+
+            String Columns[] = Rows[0].split(",");
+            Columnas = Columns.length;
+            
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                IdAlumno1 = Integer.parseInt(Columns[0]);
+                IdCurso1 = Integer.parseInt(Columns[1]);
+
+                Asignar[Cont++] = new Asignacion_alumno(IdAlumno1, IdCurso1, Nota1);
+                
+                if (Asignar[i] != null) {
+                    ++Cont2;
+                }
+            }
+            System.out.println("\nFueron asignados: " + Cont + " alumnos a sus cursos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId del Alumno: " + String.valueOf(Asignar[i].getId_alumno()));
+                System.out.println("Id del Curso: " + String.valueOf(Asignar[i].getId_curso()));
+            }
+            Reader.close();
+        } catch (Exception e) {
+
+        }
+    }
+    
+    public static void AsignarProfesores(String Ruta) {
+        int IdProfesor1 = IdProfesor;
+        int IdCurso1 = IdCurso;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String Rows[] = Data.split("\n");
+            Filas = Rows.length;
+
+            String Columns[] = Rows[0].split(",");
+            Columnas = Columns.length;
+            
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                IdProfesor1 = Integer.parseInt(Columns[0]);
+                IdCurso1 = Integer.parseInt(Columns[1]);
+
+                Asignar2[Cont++] = new Asignacion_prof(IdProfesor1, IdCurso1);
+                
+                if (Asignar2[i] != null) {
+                    ++Cont2;
+                }
+            }
+            System.out.println("\nFueron asignados: " + Cont + " profesores a sus cursos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId del Profesor: " + String.valueOf(Asignar2[i].getId_prof()));
+                System.out.println("Id del Curso: " + String.valueOf(Asignar2[i].getId_curso()));
+            }
+            Reader.close();
+        } catch (Exception e) {
+
         }
     }
 }
