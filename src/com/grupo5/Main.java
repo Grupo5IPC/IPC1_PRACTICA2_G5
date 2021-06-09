@@ -18,8 +18,9 @@ public class Main {
     public static Curso[] cursos = new Curso[15];
     public static Profesor[] profesores = new Profesor[20];
     public static Alumno[] alumnos = new Alumno[100];
+    static Asignacion_alumno[] Asignar = new Asignacion_alumno[alumnos.length];
     static String Ruta;
-    static int Columnas, Filas;
+    static int Columnas, Filas, IdAlumno, IdCurso, IdProfesor, Nota;
     public static Gestor_alumno  gestor_alumno ;
     public static Gestor_curso gestor_curso ;
     public static Gestor_profesor gestor_profesor;
@@ -73,7 +74,13 @@ public class Main {
                             Ruta = escribirRuta.nextLine();
                             CargarCursos(Ruta);
                             break;
-
+                        
+                        case 4:
+                            System.out.println("Ingrese la ruta del archivo: ");
+                            Ruta = escribirRuta.nextLine();
+                            AsignarAlumnos(Ruta);
+                            break;    
+                            
                         case 8:
                             System.out.println("Has salido del programa");
                             break;
@@ -243,4 +250,50 @@ public class Main {
             Reader.close();
         } catch (Exception e) {
         }
+        
+        public static void AsignarAlumnos(String Ruta) {
+        int IdAlumno1 = IdAlumno;
+        int IdCurso1 = IdCurso;
+        double Nota1 = 0.0;
+        Nota1 = Nota;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String Rows[] = Data.split("\n");
+            Filas = Rows.length;
+
+            String Columns[] = Rows[0].split(",");
+            Columnas = Columns.length;
+            
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Filas; i++) {
+                Columns = Rows[i].split(",");
+
+                IdAlumno1 = Integer.parseInt(Columns[0]);
+                IdCurso1 = Integer.parseInt(Columns[1]);
+
+                Asignar[Cont++] = new Asignacion_alumno(IdAlumno1, IdCurso1, Nota1);
+                
+                if (Asignar[i] != null) {
+                    ++Cont2;
+                }
+            }
+            System.out.println("\nFueron asignados: " + Cont + " alumnos a sus cursos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId del Alumno: " + String.valueOf(Asignar[i].getId_alumno()));
+                System.out.println("Id del Curso: " + String.valueOf(Asignar[i].getId_curso()));
+            }
+            Reader.close();
+        } catch (Exception e) {
+
+        }
+    }
     }
