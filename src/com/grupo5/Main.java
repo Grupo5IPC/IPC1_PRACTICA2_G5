@@ -188,7 +188,7 @@ public class Main {
 //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
 
-   public static void CargarAlumnos(String Ruta) {
+      public static void CargarAlumnos(String Ruta) {
         int Id, Carnet;
         String Nombre, FechaNac, Genero;
 
@@ -208,7 +208,13 @@ public class Main {
 
             int Cont = 0;
             int Cont2 = 0;
-            for (int i = 1; i < Filas; i++) {
+            for (int i = 1; i < Rows.length; i++) {
+                if (Rows[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            for (int i = 1; i < Cont2; i++) {
                 Columns = Rows[i].split(",");
 
                 Id = Integer.parseInt(Columns[0]);
@@ -219,14 +225,11 @@ public class Main {
 
                 alumnos[Cont++] = new Alumno(Id, Carnet, Nombre, FechaNac, Genero);
 
-                if (alumnos[i] != null) {
-                    ++Cont2;
-                }
             }
 
             System.out.println("\nFueron ingresados: " + Cont + " alumnos");
 
-            for (int i = 0; i < Filas; i++) {
+            for (int i = 0; i < Cont2; i++) {
                 System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
                 System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
                 System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
@@ -235,52 +238,9 @@ public class Main {
             }
             System.out.println("\n");
             Reader.close();
-        } catch (Exception e) {
-        }
-    }
-
-    public static void CargarCursos(String Ruta) {
-        int Id, Codigo;
-        String Nombre;
-
-        try {
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
-
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine().replace(" ", "") + "\n";
-            }
-            String[] Rows = Data.split("\n");
-            Filas = Rows.length;
-
-            String[] Columns = Rows[0].split(",");
-            Columnas = Columns.length;
-
-            int Cont = 0;
-            int Cont2 = 0;
-            for (int i = 1; i < Filas; i++) {
-                Columns = Rows[i].split(",");
-
-                Id = Integer.parseInt(Columns[0]);
-                Codigo = Integer.parseInt(Columns[1]);
-                Nombre = Columns[2];
-                cursos[Cont++] = new Curso(Id, Codigo, Nombre);
-
-                if (cursos[i] != null) {
-                    ++Cont2;
-                }
-            }
-
-            System.out.println("\nFueron ingresados: " + Cont + " cursos");
-
-            for (int i = 0; i < Filas; i++) {
-                System.out.println("\nId: " + String.valueOf(cursos[i].getId()));
-                System.out.println("Codigo: " + String.valueOf(cursos[i].getCodigo()));
-                System.out.println("Nombre: " + String.valueOf(cursos[i].getNombre()));
-            }
-            System.out.println("\n");
-            Reader.close();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
+            System.out.println("Solo se agregaron los datos dentro del rango");
         } catch (Exception e) {
         }
     }
@@ -305,7 +265,13 @@ public class Main {
 
             int Cont = 0;
             int Cont2 = 0;
-            for (int i = 1; i < Filas; i++) {
+            for (int i = 1; i < Rows.length; i++) {
+                if (Rows[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            for (int i = 1; i < Cont2; i++) {
                 Columns = Rows[i].split(",");
 
                 Id = Integer.parseInt(Columns[0]);
@@ -317,12 +283,9 @@ public class Main {
 
                 profesores[Cont++] = new Profesor(Id, Registro, Nombre, FechaNac, FechaCont, Genero);
 
-                if (profesores[i] != null) {
-                    ++Cont2;
-                }
             }
 
-            System.out.println("\nFueron ingresados: " + Cont + " alumnos");
+            System.out.println("\nFueron ingresados: " + Cont + " profesores");
 
             for (int i = 0; i < Filas; i++) {
                 System.out.println("\nId: " + String.valueOf(profesores[i].getId()));
@@ -334,6 +297,62 @@ public class Main {
             }
             System.out.println("\n");
             Reader.close();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
+            System.out.println("Solo se agregaron los datos dentro del rango");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    public static void CargarCursos(String Ruta) {
+        int Id, Codigo;
+        String Nombre;
+
+        try {
+            File CSV = new File(Ruta);
+            Scanner Reader = new Scanner(CSV);
+            String Data = "";
+
+            while (Reader.hasNextLine()) {
+                Data += Reader.nextLine().replace(" ", "") + "\n";
+            }
+            String[] Rows = Data.split("\n");
+            Filas = Rows.length;
+
+            String[] Columns = Rows[0].split(",");
+            Columnas = Columns.length;
+
+            int Cont = 0;
+            int Cont2 = 0;
+            for (int i = 1; i < Rows.length; i++) {
+                if (Rows[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            for (int i = 1; i < Cont2; i++) {
+                Columns = Rows[i].split(",");
+
+                Id = Integer.parseInt(Columns[0]);
+                Codigo = Integer.parseInt(Columns[1]);
+                Nombre = Columns[2];
+                cursos[Cont++] = new Curso(Id, Codigo, Nombre);
+
+            }
+
+            System.out.println("\nFueron ingresados: " + Cont + " cursos");
+
+            for (int i = 0; i < Filas; i++) {
+                System.out.println("\nId: " + String.valueOf(cursos[i].getId()));
+                System.out.println("Codigo: " + String.valueOf(cursos[i].getCodigo()));
+                System.out.println("Nombre: " + String.valueOf(cursos[i].getNombre()));
+            }
+            System.out.println("\n");
+            Reader.close();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
+            System.out.println("Solo se agregaron los datos dentro del rango");
         } catch (Exception e) {
         }
     }
@@ -357,20 +376,23 @@ public class Main {
 
             String Columns[] = Rows[0].split(",");
             Columnas = Columns.length;
-            
+
             int Cont = 0;
             int Cont2 = 0;
-            for (int i = 1; i < Filas; i++) {
+            for (int i = 1; i < Rows.length; i++) {
+                if (Rows[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            for (int i = 1; i < Cont2; i++) {
                 Columns = Rows[i].split(",");
 
                 IdAlumno1 = Integer.parseInt(Columns[0]);
                 IdCurso1 = Integer.parseInt(Columns[1]);
 
                 Asignar[Cont++] = new Asignacion_alumno(IdAlumno1, IdCurso1, Nota1);
-                
-                if (Asignar[i] != null) {
-                    ++Cont2;
-                }
+
             }
             System.out.println("\nFueron asignados: " + Cont + " alumnos a sus cursos");
 
@@ -379,11 +401,13 @@ public class Main {
                 System.out.println("Id del Curso: " + String.valueOf(Asignar[i].getId_curso()));
             }
             Reader.close();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
+            System.out.println("Solo se agregaron los datos dentro del rango");
         } catch (Exception e) {
-
         }
     }
-    
+
     public static void AsignarProfesores(String Ruta) {
         int IdProfesor1 = IdProfesor;
         int IdCurso1 = IdCurso;
@@ -401,20 +425,23 @@ public class Main {
 
             String Columns[] = Rows[0].split(",");
             Columnas = Columns.length;
-            
+
             int Cont = 0;
             int Cont2 = 0;
-            for (int i = 1; i < Filas; i++) {
+            for (int i = 1; i < Rows.length; i++) {
+                if (Rows[i] != null) {
+                    ++Cont2;
+                }
+            }
+
+            for (int i = 1; i < Cont2; i++) {
                 Columns = Rows[i].split(",");
 
                 IdProfesor1 = Integer.parseInt(Columns[0]);
                 IdCurso1 = Integer.parseInt(Columns[1]);
 
                 Asignar2[Cont++] = new Asignacion_prof(IdProfesor1, IdCurso1);
-                
-                if (Asignar2[i] != null) {
-                    ++Cont2;
-                }
+
             }
             System.out.println("\nFueron asignados: " + Cont + " profesores a sus cursos");
 
@@ -423,8 +450,10 @@ public class Main {
                 System.out.println("Id del Curso: " + String.valueOf(Asignar2[i].getId_curso()));
             }
             Reader.close();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
+            System.out.println("Solo se agregaron los datos dentro del rango");
         } catch (Exception e) {
-
         }
     }
 }
