@@ -27,6 +27,9 @@ public class Main {
         gestor_curso = new Gestor_curso();
         gestor_profesor = new Gestor_profesor();
         gestor_usuarios = new Gestor_usuarios();
+
+        // cargar alumno
+
         menuPrincipal();
     }
 
