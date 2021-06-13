@@ -12,14 +12,16 @@ public class Gestor_alumno {
 
     Alumno[] alumnos;
     Asignacion_alumno[] asignaciones;
+    Notas[] notas;
 
     public Gestor_alumno() {
         alumnos = new Alumno[100];
         asignaciones = new Asignacion_alumno[200];
+        notas = new Notas[200];
     }
 
-    public boolean Ins_alum(int id, int carnet, String nombre, String fecha, String genero) {
-        for (int i = 0; i < 100; i++) {
+    public boolean Ins_alum(int id, int carnet, String nombre, String fecha, char genero) {
+        for (int i = 0; i < alumnos.length; i++) {
             if (alumnos[i] == null) {
                 alumnos[i] = new Alumno(id, carnet, nombre, fecha, genero);
                 return true;
@@ -28,14 +30,36 @@ public class Gestor_alumno {
         return false;
     }
 
-    public boolean verificar_alum(int id) {
+    public boolean verificar_alum_carnet(int carnet) {
         boolean s = false;
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < alumnos.length; i++) {
             if (alumnos[0] == null) {
+               // System.out.println("nuevo");
                 return true;
             } else {
                 if (alumnos[i] != null) {
-                    if (alumnos[i].getId() == id) {
+                    if (alumnos[i].getCarnet() ==carnet ) {
+                        s = false;
+                        break;
+                    } else {
+                        s = true;
+                    }
+
+                }
+
+            }
+        }
+        return s;
+    }
+    public boolean verificar_alum_id(int id) {
+        boolean s = false;
+        for (int i = 0; i < alumnos.length; i++) {
+            if (alumnos[0] == null) {
+                // System.out.println("nuevo");
+                return true;
+            } else {
+                if (alumnos[i] != null) {
+                    if (alumnos[i].getId() ==id ) {
                         s = false;
                         break;
                     } else {
@@ -51,11 +75,12 @@ public class Gestor_alumno {
 
     public void print_alumnos() {
         System.out.println("Alumnos ingresados actualmente:");
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < alumnos.length; i++) {
             if (alumnos[i] != null) {
 
                 System.out.print(alumnos[i].getId() + ",");
                 System.out.print(alumnos[i].getCarnet() + ",");
+                System.out.print(alumnos[i].getNombre() + ",");
                 System.out.print(alumnos[i].getFecha() + ",");
                 System.out.println(alumnos[i].getGenero() + ",");
             }
@@ -63,10 +88,19 @@ public class Gestor_alumno {
         }
     }
 
-    public boolean asginar_curso(int id_a, int id_c, double zona) {
-        for (int i = 0; i < 200; i++) {
+    public boolean asginar_curso(int id_a, int id_c) {
+        for (int i = 0; i < asignaciones.length; i++) {
             if (asignaciones[i] == null) {
-                asignaciones[i] = new Asignacion_alumno(id_a, id_c, zona);
+                asignaciones[i] = new Asignacion_alumno(id_a, id_c );
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean asginarNota(int id_a, int id_c, double nota) {
+        for (int i = 0; i < notas.length; i++) {
+            if (notas[i] == null) {
+                notas[i] = new Notas(id_a, id_c , nota);
                 return true;
             }
         }
@@ -75,7 +109,7 @@ public class Gestor_alumno {
 
     public boolean verificar_asign(int id_a, int id_c) {
         boolean s = false;
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < asignaciones.length; i++) {
             if (asignaciones[0] == null) {
                 s = true;
                 break;
@@ -147,8 +181,23 @@ public class Gestor_alumno {
             if (asignaciones[i] != null) {
 
                 System.out.print(asignaciones[i].getId_alumno() + ",");
-                System.out.print(asignaciones[i].getId_curso() + ",");
-                System.out.println(asignaciones[i].getNota() + ",");
+                System.out.println(asignaciones[i].getId_curso() + ",");
+
+
+            }
+
+        }
+    }
+    public void printNota() {
+        System.out.println("Notas:");
+        for (int i = 0; i < 200; i++) {
+            if (notas[i] != null) {
+
+                System.out.print(notas[i].getIdAlumno() + ",");
+                System.out.print(notas[i].getIdCurso() + ",");
+
+                System.out.println(notas[i].getNota() + ",");
+
 
             }
 
@@ -231,6 +280,16 @@ public class Gestor_alumno {
         }
         return cant;
     }
+    public int cantidad_filas_notas() {
+        int cant = 0;
+        for (int i = 0; i < 200; i++) {
+            if (notas[i] != null) {
+                cant++;
+
+            }
+        }
+        return cant;
+    }
 
     public int cantidad_filas_asig(int id) {
         int cant = 0;
@@ -245,24 +304,60 @@ public class Gestor_alumno {
         }
         return cant;
     }
+    public int[] getIds_encurso(int idCurso) {
+        int filas = 0;
+
+        for (int i = 0; i < notas.length; i++) {
+            if (notas[i] != null) {
+                if (notas[i].getIdCurso() == idCurso) {
+                    filas++;
+
+                }
+            }
+
+        }
+        int ids [] = new int [filas];
+        int auxiliar = 0;
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < notas.length; j++) {
+                if (notas[j] != null) {
+                    if (notas[j].getIdCurso() == idCurso) {
+                        if (auxiliar != ids[i]) {
+                            ids[i] = notas[j].getIdAlumno();
+                            auxiliar = ids[i];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return ids;
+    }
+
+
 
     public int get_id_al(int id) {
 
         return asignaciones[id].getId_alumno();
     }
 
-    public int get_id_curso(int id) {
+    public int getCarnetAsig(int id) {
 
-        return asignaciones[id].getId_curso();
+        int carnet =0;
+        for (int i = 0; i < alumnos.length; i++) {
+
+            if (alumnos[i] != null) {
+                if (alumnos[i].getId() == id) {
+                    carnet = alumnos[i].getCarnet();
+                    break;
+                }
+            }
+        }
+        return carnet;
     }
-
-    public double get_nota(int id) {
-        return asignaciones[id].getNota();
-    }
-
-    public String buscar_nombre_alumn(int id) {
+    public String buscar_nombre_alumn(int id)  {
         String nombre = "";
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < alumnos.length; i++) {
 
             if (alumnos[i] != null) {
                 if (alumnos[i].getId() == id) {
@@ -273,16 +368,77 @@ public class Gestor_alumno {
         }
         return nombre;
     }
+    public double buscarNota(int idAlumno, int idCurso)  {
+        double nota =0.0;
+        for (int i = 0; i < notas.length; i++) {
+
+            if (notas[i] != null) {
+                if (notas[i].getIdAlumno() == idAlumno && notas[i].getIdCurso() == idCurso) {
+                    nota = notas[i].getNota();
+                    break;
+                }
+            }
+        }
+        return nota;
+    }
+
+
+
+
+
+    public int get_id_curso(int id) {
+
+        return asignaciones[id].getId_curso();
+    }
+
+
+   /* public double get_nota(int id) {
+        return asignaciones[id].getNota();
+    }
+
+    */
+
+
 
     public int verificar_cant() {
         int cantidad = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < alumnos.length; i++) {
             if (alumnos[i] != null) {
 
                 cantidad++;
             }
         }
-
+        System.out.println(cantidad);
         return cantidad;
+    }
+
+    //FUNCIONES DE BUSQUEDA
+
+    public int getCarnet(int i){
+        return alumnos[i].getCarnet();
+    }
+    public String getNombre(int i){
+        return alumnos[i].getNombre();
+    }
+    public String getGenero(int i){
+        if (alumnos[i].getGenero() =='M'){
+            return "Masculino";
+        }else{
+            return "Femenino";
+        }
+
+    }
+
+
+    public boolean verificarIngreso(int idAlumno, int IdCurso){
+        for (int i = 0; i < notas.length; i++) {
+            if (notas[i] != null) {
+                if (notas[i].getIdAlumno() == idAlumno && notas[i].getIdCurso() == IdCurso) {
+                    return false;
+
+                }
+            }
+        }
+        return true;
     }
 }

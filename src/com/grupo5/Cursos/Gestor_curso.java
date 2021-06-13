@@ -18,7 +18,7 @@ public class Gestor_curso {
     }
 
     public boolean Ins_curso(int id, int codigo, String Nombre) {
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < cursos.length; i++) {
             if (cursos[i] == null) {
                 cursos[i] = new Curso(id,codigo, Nombre);
                 return true;
@@ -27,9 +27,9 @@ public class Gestor_curso {
         return false;
     }
 
-    public boolean verificar_curso(int id) {
+    public boolean verificar_curso_id(int id) {
         boolean s = false;
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < cursos.length; i++) {
             if (cursos[0] == null) {
                 return true;
             } else {
@@ -45,10 +45,28 @@ public class Gestor_curso {
         }
         return s;
     }
+    public boolean verificar_curso_codigo(int codigo) {
+        boolean s = false;
+        for (int i = 0; i < cursos.length; i++) {
+            if (cursos[0] == null) {
+                return true;
+            } else {
+                if (cursos[i] != null) {
+                    if (cursos[i].getCodigo() == codigo) {
+                        s = false;
+                        break;
+                    } else {
+                        s = true;
+                    }
+                }
+            }
+        }
+        return s;
+    }
 
     public void print_cursos() {
         System.out.println("Cursos:");
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < cursos.length; i++) {
             if (cursos[i] != null) {
 
                 System.out.print(cursos[i].getId() + ",");
@@ -58,9 +76,35 @@ public class Gestor_curso {
 
         }
     }
+    public void print_cursos_codigo() {
+        System.out.println("Cursos:");
+        for (int i = 0; i < cursos.length; i++) {
+            if (cursos[i] != null) {
+
+                System.out.print(cursos[i].getCodigo() + ",");
+                System.out.println(cursos[i].getNombre() + ",");
+
+            }
+
+        }
+    }
+
+    public int buscarCodigo_clase(int id){
+        int codigo=0;
+        for (int i = 0; i < cursos.length; i++) {
+
+            if (cursos[i] != null) {
+                if (cursos[i].getId() == id) {
+                    codigo = cursos[i].getCodigo();
+                    break;
+                }
+            }
+        }
+        return codigo;
+    }
     public String buscar_nombre_clase(int id){
         String nombre="";
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < cursos.length; i++) {
             
                 if (cursos[i] != null) {
                     if (cursos[i].getId() == id) {
@@ -73,7 +117,7 @@ public class Gestor_curso {
     }
     public int verificar_cant(){
         int cantidad = 0;
-        for (int i = 0; i < 15;i++) {
+        for (int i = 0; i < cursos.length;i++) {
             if (cursos[i]!= null) {
                  
                     cantidad++;
@@ -81,5 +125,22 @@ public class Gestor_curso {
             }
 
         return cantidad;
+    }
+
+    public int getIdcurso(int id){
+        return cursos[id].getId();
+    }
+    public int buscarId_clase(int codigo){
+        int id =0;
+        for (int i = 0; i < cursos.length; i++) {
+
+            if (cursos[i] != null) {
+                if (cursos[i].getCodigo() == codigo) {
+                    id = cursos[i].getId();
+                    break;
+                }
+            }
+        }
+        return id;
     }
 }

@@ -14,9 +14,9 @@ public class Alumno {
     private int Carnet;
     private String Nombre;
     private String Fecha;
-    private String Genero;
+    private char Genero;
 
-    public Alumno(int id, int carnet, String nombre, String fecha, String genero ){
+    public Alumno(int id, int carnet, String nombre, String fecha, char genero ){
         this.setId(id);
         this.setCarnet(carnet);
         this.setNombre(nombre);
@@ -57,11 +57,11 @@ public class Alumno {
         Fecha = fecha;
     }
 
-    public String getGenero() {
+    public char getGenero() {
         return Genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(char genero) {
         Genero = genero;
     }
 }

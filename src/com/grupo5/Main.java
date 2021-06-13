@@ -2,9 +2,10 @@ package com.grupo5;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Locale;
 import java.util.Scanner;
+
 import com.grupo5.Cursos.Curso;
 import com.grupo5.Alumnos.*;
 import com.grupo5.Cursos.*;
@@ -13,33 +14,39 @@ import com.grupo5.Usuarios.*;
 
 public class Main {
 
-    public static Scanner MenuPrincipal = new Scanner(System.in);
+    //public static Scanner MenuPrincipal = new Scanner(System.in);
     public static Scanner escribirRuta = new Scanner(System.in);
     public static Curso[] cursos = new Curso[15];
     public static Profesor[] profesores = new Profesor[20];
     public static Alumno[] alumnos = new Alumno[100];
     static Asignacion_alumno[] Asignar = new Asignacion_alumno[200];
     static Asignacion_prof[] Asignar2 = new Asignacion_prof[30];
-    static String Ruta;
-    static int Columnas, Filas, IdAlumno, IdCurso, IdProfesor, Nota;
+    static String Ruta, Log;
+    static int Columnas, Filas, IdAlumno, IdCurso, IdProfesor, Nota, alum, curs, profs, asig_alum, asig_prof;
     public static Gestor_alumno gestor_alumno;
     public static Gestor_curso gestor_curso;
     public static Gestor_profesor gestor_profesor;
     public static Gestor_usuarios gestor_usuarios;
+    public static Handler verificaciones;
+    public static Reportes reportes;
+    public static Log log;
+
 
     public static void main(String[] args) {
         gestor_alumno = new Gestor_alumno();
         gestor_curso = new Gestor_curso();
         gestor_profesor = new Gestor_profesor();
         gestor_usuarios = new Gestor_usuarios();
-
-        // cargar alumno
+        log = new Log();
+        verificaciones = new Handler(log);
+        reportes = new Reportes();
 
         menuPrincipal();
+
     }
 
     public static void menuPrincipal() {
-
+        Scanner MenuPrincipal = new Scanner(System.in);
         try {
             System.out.println("*******************************");
             System.out.println("*           LOGIN             *");
@@ -63,46 +70,46 @@ public class Main {
                         System.out.println("* 5) Asignar Profesores       *");
                         System.out.println("* 6) Cargar Notas             *");
                         System.out.println("* 7) Agregar Usuario          *");
-                        System.out.println("* 8) Salir                    *");
+                        System.out.println("* 8) Cerrar sesion            *");
+                        System.out.println("* 9) Salir                    *");
                         System.out.println("*******************************");
                         System.out.print("Elige una opcion: ");
                         Opciones = MenuPrincipal.nextInt();
                         switch (Opciones) {
                             case 1:
-                            System.out.println("Ingrese la ruta del archivo: ");
-                            Ruta = escribirRuta.nextLine();
-                            CargarAlumnos(Ruta);
-                            break;
 
-                        case 2:
-                            System.out.println("Ingrese la ruta del archivo: ");
-                            Ruta = escribirRuta.nextLine();
-                            CargarProfesores(Ruta);
-                            break;
+                                C_alumnos();
+                                break;
 
-                        case 3:
-                            System.out.println("Ingrese la ruta del archivo: ");
-                            Ruta = escribirRuta.nextLine();
-                            CargarCursos(Ruta);
-                            break;
+                            case 2:
+                                C_profesores();
+                                break;
 
-                        case 4:
-                            System.out.println("Ingrese la ruta del archivo: ");
-                            Ruta = escribirRuta.nextLine();
-                            AsignarAlumnos(Ruta);
-                            break;
-                            
-                        case 5:
-                            System.out.println("Ingrese la ruta del archivo: ");
-                            Ruta = escribirRuta.nextLine();
-                            AsignarProfesores(Ruta);
-                            break;
+                            case 3:
+                                C_cursos();
+                                break;
 
+                            case 4:
+                                A_alumnos();
+                                break;
+
+                            case 5:
+                                A_profesores();
+                                break;
+
+                            case 6:
+                                ingresoNotas();
+                                break;
                             case 7:
                                 NuevoUser();
                                 break;
 
                             case 8:
+                                System.out.print("\033[H\033[2J");
+                                System.out.flush();
+                                menuPrincipal();
+                                break;
+                            case 9:
                                 System.out.println("Has salido del programa");
                                 break;
 
@@ -114,12 +121,12 @@ public class Main {
                         MenuPrincipal = new Scanner(System.in);
                         System.out.println("Advertencia: Debes elegir una opción de 1 a x");
                     }
-                } while (Opciones != 8);
+                } while (Opciones != 9);
             } else if (gestor_usuarios.verificar(user, pass)) {
                 do {
                     try {
                         System.out.println("*************************************");
-                        System.out.println("*           MENÚ PRINCIPAL          *");
+                        System.out.println("*           MENÚ DE REPORTES        *");
                         System.out.println("*************************************");
                         System.out.println("* 1) Reporte de Alumnos             *");
                         System.out.println("* 2) Reporte asignacion Alumnos     *");
@@ -127,25 +134,40 @@ public class Main {
                         System.out.println("* 4) Reporte General                *");
                         System.out.println("* 5) Reporte Especifico             *");
                         System.out.println("* 6) Top 5 Mejores Alumnos          *");
+                        System.out.println("* 7) Cerrar sesion                  *");
                         System.out.println("* 7) Salir                          *");
-                        System.out.println("*******************************");
+                        System.out.println("*************************************");
                         System.out.print("Elige una opcion: ");
                         Opciones = MenuPrincipal.nextInt();
                         switch (Opciones) {
                             case 1:
-
+                                repAlumnos();
                                 break;
 
                             case 2:
-
+                                repAsignacion_alumnos();
                                 break;
 
                             case 3:
-
+                                repAsignacion_profesores();
                                 break;
 
+                            case 4:
+                                repCursos();
+                                break;
+                            case 5:
+                                repCurso();
+                                break;
+                            case 6:
+                                repTop5();
+                                break;
                             case 7:
-
+                                System.out.print("\033[H\033[2J");
+                                System.out.flush();
+                                menuPrincipal();
+                                break;
+                            case 8:
+                                System.out.println("Has salido del programa");
                                 break;
 
                             default:
@@ -164,7 +186,7 @@ public class Main {
         }
     }
 
-//----------------------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------    
     public static void NuevoUser() {
         System.out.println("*******************************");
@@ -180,946 +202,704 @@ public class Main {
         Scanner confirmarPass = new Scanner(System.in);
         String npass2 = confirmarPass.nextLine();
         System.out.println("*******************************");
-        if(nuser.equals("admin") && npass.equals(npass2)){
+        if ( npass.equals(npass2)) {
             gestor_usuarios.Ins_usu(nuser, npass);
             System.out.println("\nAgregado corretamente \n");
-        }else{
-        System.out.println("Error: ocurrio un problema en su registro");
-        System.out.println("Vuelva a intentarlo");
+        } else {
+            System.out.println("Error: ocurrio un problema en su registro");
+            System.out.println("Vuelva a intentarlo");
+        }
     }
-    }
+
+    //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------------
 
-          public static void CargarAlumnos(String Ruta) {
-        int Id, Carnet;
-        String Nombre, FechaNac, Genero;
 
-        try {
-            //Carga de Archivo e interpretación
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
+    public static void C_alumnos() {
+        String aux = Log;
+        int cont = 0;
+        if (gestor_alumno.verificar_cant() == 100) {
+            System.out.println("Ya se han ingresado la cantidad maxima de alumnos");
+        } else {
+            try {
+                String filas[] = getFilas();
+                String col[] = filas[0].split(",");
 
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine().replace(" ", "") + "\n";
-            }
-            String[] Rows = Data.split("\n");
-            Filas = Rows.length;
+                for (int i = 0; i < filas.length; i++) {
+                    col = filas[i].split(",");
+                    if (!verificaciones.ComprobarFila_Alumno(filas[i].split(","), cont)) {
+                        if (cont == 0){
 
-            String[] Columns = Rows[0].split(",");
-            Columnas = Columns.length;
 
-            //Contador de filas en el archivo llenas de datos
-            int Cont = 0;
-            int Cont2 = 0;
-            for (int i = 1; i < Rows.length; i++) {
-                if (Rows[i] != null) {
-                    ++Cont2;
-                }
-            }
-
-            //Llena el arreglo con datos del archivo
-            for (int i = 1; i <= Cont2; i++) {
-                try {
-                    try {
-                        if (Rows[i] != null) {
-
-                            Columns = Rows[i].split(",");
-
-                            Id = Integer.parseInt(Columns[0]);
-                            Carnet = Integer.parseInt(Columns[1]);
-                            Nombre = Columns[2];
-                            FechaNac = Columns[3];
-                            Genero = Columns[4];
-
-                            Alumno alumnos1 = new Alumno(Id, Carnet, Nombre, FechaNac, Genero);
-                            alumnos[Cont++] = alumnos1;
+                            cont++;
                         }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                        //System.out.println("porque excede la capacidad de carga");
+
+                        //System.out.println("pasa");
+                        continue;
                     }
-                } catch (Exception e) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque un elemento no coincide");
-                    //Cont = Cont - 1;
 
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (alumnos[i].getId() == alumnos[j].getId()) {
-                                alumnos[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                                //System.out.println("porque su id es repetido");
-
-                            } else {
-                            }
+                    if ((gestor_alumno.verificar_alum_carnet(Integer.parseInt(col[1]))) && (gestor_alumno.verificar_alum_id(Integer.parseInt(col[0])))) {
+                        if (gestor_alumno.verificar_cant() == 100) {
+                            System.out.println("Limite de carga Alcanzado");
+                            break;
                         } else {
 
+                            char genero = col[4].charAt(0);
+                            gestor_alumno.Ins_alum(Integer.parseInt(col[0]), Integer.parseInt(col[1]), col[2], col[3], genero);
+                            alum++;
                         }
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (alumnos[i] == null) {
-
-                        for (int j = i; j < alumnos.length - 1; j++) {
-                            alumnos[j] = alumnos[j + 1];
-                        }
-                        alumnos[alumnos.length - 1] = null;
                     } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Agregar datos fuera de la carga solo si se borraron algunos datos incorrectos cargados
-            int aux = 1;
-            for (int i = 0; i <= alumnos.length; i++) {
-                try {
-
-                    if (alumnos[i] == null) {
-                        int dato = alumnos.length - i;
-                        int dato2 = i + dato + aux++;
-
-                        if (Rows[dato2] != null) {
-
-                            Columns = Rows[dato2].split(",");
-
-                            Id = Integer.parseInt(Columns[0]);
-                            Carnet = Integer.parseInt(Columns[1]);
-                            Nombre = Columns[2];
-                            FechaNac = Columns[3];
-                            Genero = Columns[4];
-
-                            Alumno alumnos1 = new Alumno(Id, Carnet, Nombre, FechaNac, Genero);
-                            alumnos[i] = alumnos1;
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque excede la capacidad de carga :0");
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (alumnos[i].getId() == alumnos[j].getId()) {
-                                alumnos[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "], ");
-                                //System.out.println("porque su id es repetido :0");
-
-                            } else {
-                            }
-                        } else {
-
-                        }
-                    } catch (Exception e) {
+                        log.addCuerpo("El Carnet o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentra registrado");
                     }
                 }
+                gestor_alumno.print_alumnos();
+
+
+            } catch (Exception e) {
+                System.out.println("Hubo un error" + e);
+
             }
 
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (alumnos[i] == null) {
 
-                        for (int j = i; j < alumnos.length - 1; j++) {
-                            alumnos[j] = alumnos[j + 1];
-                        }
-                        alumnos[alumnos.length - 1] = null;
-                    } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont3 = 0;
-            for (int i = 0; i <= Rows.length; i++) {
-                try {
-                    if (alumnos[i] != null) {
-                        ++Cont3;
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Imprimimos los datos ingresados
-            System.out.println("\nFueron ingresados: " + Cont3 + " alumnos");
-
-            for (int i = 0; i < Cont2; i++) {
-                if (alumnos[i] != null) {
-                    /*System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
-                    System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
-                    System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
-                    System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
-                    System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));*/
-                }
-            }
-            System.out.println("\n");
-            Reader.close();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
-            System.out.println("pero se agregaron los datos correspondientes");
-            System.out.println("");
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
-    public static void CargarProfesores(String Ruta) {
-        int Id, Registro;
-        String Nombre, FechaNac, FechaCont, Genero;
+    public static void C_profesores() {
+        int cont = 0;
+        if (gestor_profesor.verificar_cant() == 20) {
+            System.out.println("Ya se han ingresado la cantidad maxima de profesores");
+        } else {
+            try {
+                String filas[] = getFilas();
+                String col[] = filas[0].split(",");
 
-        try {
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
+                for (int i = 1; i < filas.length; i++) {
+                    col = filas[i].split(",");
+                    if (!verificaciones.ComprobarFilaprofesor(filas[i].split(","))) {
+                        if (cont == 0){
 
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine().replace(" ", "") + "\n";
-            }
-            String[] Rows = Data.split("\n");
-            Filas = Rows.length;
 
-            String[] Columns = Rows[0].split(",");
-            Columnas = Columns.length;
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont = 0;
-            int Cont2 = 0;
-            for (int i = 1; i < Rows.length; i++) {
-                if (Rows[i] != null) {
-                    ++Cont2;
-                }
-            }
-
-            //Llena el arreglo con datos del archivo
-            for (int i = 1; i <= Cont2; i++) {
-                try {
-                    try {
-                        if (Rows[i] != null) {
-
-                            Columns = Rows[i].split(",");
-
-                            Id = Integer.parseInt(Columns[0]);
-                            Registro = Integer.parseInt(Columns[1]);
-                            Nombre = Columns[2];
-                            FechaNac = Columns[3];
-                            FechaCont = Columns[4];
-                            Genero = Columns[5];
-
-                            Profesor profesor1 = new Profesor(Id, Registro, Nombre, FechaNac, FechaCont, Genero);
-                            profesores[Cont++] = profesor1;
+                            cont++;
                         }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                        //System.out.println("porque excede la capacidad de carga");
+                        //System.out.println("pasa");
+                        continue;
                     }
-                } catch (Exception e) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque un elemento no coincide");
-                    //Cont = Cont - 1;
 
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (profesores[i].getId() == profesores[j].getId()) {
-                                profesores[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                                //System.out.println("porque su id es repetido");
-
-                            } else {
-                            }
+                    if ((gestor_profesor.verificar_prof_registro(Integer.parseInt(col[1]))) && (gestor_profesor.verificar_prof_id(Integer.parseInt(col[0])))) {
+                        if (gestor_profesor.verificar_cant() == 20) {
+                            System.out.println("Limite de carga alcanzado");
+                            break;
                         } else {
 
+                            char genero = col[5].charAt(0);
+                            gestor_profesor.Ins_prof(Integer.parseInt(col[0]), Integer.parseInt(col[1]), col[2], col[3], col[4], genero);
+                            profs++;
                         }
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (profesores[i] == null) {
-
-                        for (int j = i; j < profesores.length - 1; j++) {
-                            profesores[j] = profesores[j + 1];
-                        }
-                        profesores[profesores.length - 1] = null;
                     } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Agregar datos fuera de la carga solo si se borraron algunos datos incorrectos cargados
-            int aux = 1;
-            for (int i = 0; i <= profesores.length; i++) {
-                try {
-
-                    if (profesores[i] == null) {
-                        int dato = profesores.length - i;
-                        int dato2 = i + dato + aux++;
-
-                        if (Rows[dato2] != null) {
-
-                            Columns = Rows[dato2].split(",");
-
-                            Id = Integer.parseInt(Columns[0]);
-                            Registro = Integer.parseInt(Columns[1]);
-                            Nombre = Columns[2];
-                            FechaNac = Columns[3];
-                            FechaCont = Columns[4];
-                            Genero = Columns[5];
-
-                            Profesor profesores1 = new Profesor(Id, Registro, Nombre, FechaNac, FechaCont, Genero);
-                            profesores[i] = profesores1;
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque excede la capacidad de carga :0");
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (profesores[i].getId() == profesores[j].getId()) {
-                                profesores[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "], ");
-                                //System.out.println("porque su id es repetido :0");
-
-                            } else {
-                            }
-                        } else {
-
-                        }
-                    } catch (Exception e) {
+                        Log += Integer.parseInt(col[1]) + ",";
                     }
                 }
+                gestor_profesor.print_profesores();
+
+
+            } catch (Exception e) {
+                System.out.println("Hubo un error" + e);
+
             }
 
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (profesores[i] == null) {
 
-                        for (int j = i; j < profesores.length - 1; j++) {
-                            profesores[j] = profesores[j + 1];
-                        }
-                        profesores[profesores.length - 1] = null;
-                    } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont3 = 0;
-            for (int i = 0; i <= Rows.length; i++) {
-                try {
-                    if (profesores[i] != null) {
-                        ++Cont3;
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Imprimimos los datos ingresados
-            System.out.println("\nFueron ingresados: " + Cont3 + " profesores");
-
-            for (int i = 0; i < Cont2; i++) {
-                if (profesores[i] != null) {
-                    /*System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
-                    System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
-                    System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
-                    System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
-                    System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));*/
-                }
-            }
-            System.out.println("\n");
-            Reader.close();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
-            System.out.println("pero se agregaron los datos correspondientes");
-            System.out.println("");
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
-    public static void CargarCursos(String Ruta) {
-        int Id, Codigo;
-        String Nombre;
+    public static void C_cursos() {
+        if (gestor_curso.verificar_cant() == 14) {
+            System.out.println("Ya se han ingresado la cantidad maxima de cursos");
+        } else {
+            try {
+                String filas[] = getFilas();
+                String col[] = filas[0].split(",");
 
-        try {
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
-
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine().replace(" ", "") + "\n";
-            }
-            String[] Rows = Data.split("\n");
-            Filas = Rows.length;
-
-            String[] Columns = Rows[0].split(",");
-            Columnas = Columns.length;
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont = 0;
-            int Cont2 = 0;
-            for (int i = 1; i < Rows.length; i++) {
-                if (Rows[i] != null) {
-                    ++Cont2;
-                }
-            }
-
-            //Llena el arreglo con datos del archivo
-            for (int i = 1; i <= Cont2; i++) {
-                try {
-                    try {
-                        if (Rows[i] != null) {
-
-                            Columns = Rows[i].split(",");
-
-                            Id = Integer.parseInt(Columns[0]);
-                            Codigo = Integer.parseInt(Columns[1]);
-                            Nombre = Columns[2];
-                            Curso cursos1 = new Curso(Id, Codigo, Nombre);
-                            cursos[Cont++] = cursos1;
-                        }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                        //System.out.println("porque excede la capacidad de carga");
+                for (int i = 1; i < filas.length; i++) {
+                    col = filas[i].split(",");
+                    if (!verificaciones.ComprobarFila_curso(filas[i].split(","))) {
+                        System.out.println("pasa");
+                        continue;
                     }
-                } catch (Exception e) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque un elemento no coincide");
-                    //Cont = Cont - 1;
 
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (cursos[i].getId() == cursos[j].getId()) {
-                                cursos[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                                //System.out.println("porque su id es repetido");
-
-                            } else {
-                            }
+                    if ((gestor_curso.verificar_curso_codigo(Integer.parseInt(col[1]))) && (gestor_curso.verificar_curso_id(Integer.parseInt(col[0])))) {
+                        if (gestor_profesor.verificar_cant() == 14) {
                         } else {
 
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-            }
+                            gestor_curso.Ins_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]), col[2]);
+                            curs++;
 
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (cursos[i] == null) {
-
-                        for (int j = i; j < cursos.length - 1; j++) {
-                            cursos[j] = cursos[j + 1];
                         }
-                        cursos[cursos.length - 1] = null;
                     } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Agregar datos fuera de la carga solo si se borraron algunos datos incorrectos cargados
-            int aux = 1;
-            for (int i = 0; i <= cursos.length; i++) {
-                try {
-
-                    if (cursos[i] == null) {
-                        int dato = cursos.length - i;
-                        int dato2 = i + dato + aux++;
-
-                        if (Rows[dato2] != null) {
-
-                            Columns = Rows[dato2].split(",");
-
-                            Id = Integer.parseInt(Columns[0]);
-                            Codigo = Integer.parseInt(Columns[1]);
-                            Nombre = Columns[2];
-                            Curso cursos1 = new Curso(Id, Codigo, Nombre);
-                            cursos[i] = cursos1;
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque excede la capacidad de carga :0");
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (cursos[i].getId() == cursos[j].getId()) {
-                                cursos[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "], ");
-                                //System.out.println("porque su id es repetido :0");
-
-                            } else {
-                            }
-                        } else {
-
-                        }
-                    } catch (Exception e) {
+                        Log += Integer.parseInt(col[1]) + ",";
                     }
                 }
+                gestor_curso.print_cursos();
+
+
+            } catch (Exception e) {
+                System.out.println("Hubo un error" + e);
+
             }
 
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (cursos[i] == null) {
 
-                        for (int j = i; j < cursos.length - 1; j++) {
-                            cursos[j] = cursos[j + 1];
-                        }
-                        cursos[cursos.length - 1] = null;
-                    } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont3 = 0;
-            for (int i = 0; i <= Rows.length; i++) {
-                try {
-                    if (cursos[i] != null) {
-                        ++Cont3;
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Imprimimos los datos ingresados
-            System.out.println("\nFueron ingresados: " + Cont3 + " cursos");
-
-            for (int i = 0; i < Cont2; i++) {
-                if (cursos[i] != null) {
-                    /*System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
-                    System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
-                    System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
-                    System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
-                    System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));*/
-                }
-            }
-            System.out.println("\n");
-            Reader.close();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
-            System.out.println("pero se agregaron los datos correspondientes");
-            System.out.println("");
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
-    public static void AsignarAlumnos(String Ruta) {
-        int IdAlumno1 = IdAlumno;
-        int IdCurso1 = IdCurso;
-        double Nota1 = 0.0;
-        Nota1 = Nota;
+    public static void A_alumnos() {
+        if (curs > 0 && alum > 0) {
+            if (gestor_alumno.cantidad_filas() == 199) {
+                System.out.println("Inscripcion maxima alcanzada");
 
-        try {
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
-
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine().replace(" ", "") + "\n";
-            }
-            String Rows[] = Data.split("\n");
-            Filas = Rows.length;
-
-            String Columns[] = Rows[0].split(",");
-            Columnas = Columns.length;
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont = 0;
-            int Cont2 = 0;
-            for (int i = 1; i < Rows.length; i++) {
-                if (Rows[i] != null) {
-                    ++Cont2;
-                }
-            }
-
-            //Llena el arreglo con datos del archivo
-            for (int i = 1; i <= Cont2; i++) {
+            } else {
                 try {
-                    try {
-                        if (Rows[i] != null) {
-
-                            Columns = Rows[i].split(",");
-
-                            IdAlumno1 = Integer.parseInt(Columns[0]);
-                            IdCurso1 = Integer.parseInt(Columns[1]);
-
-                            Asignacion_alumno asignar1 = new Asignacion_alumno(IdAlumno1, IdCurso1, Nota1);
-                            Asignar[Cont++] = asignar1;
+                    String filas[] = getFilas();
+                    String col[] = filas[0].split(",");
+                    for (int i = 1; i < filas.length; i++) {
+                        col = filas[i].split(",");
+                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","))) {
+                            System.out.println("pasa");
+                            continue;
                         }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                        //System.out.println("porque excede la capacidad de carga");
-                    }
-                } catch (Exception e) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque un elemento no coincide");
-                    //Cont = Cont - 1;
+                        if (gestor_alumno.verificar_alum_id(Integer.parseInt(col[0])) == false) {
+                            if (gestor_curso.verificar_curso_id(Integer.parseInt(col[1])) == false) {
+                                if (gestor_alumno.verificar_asign(Integer.parseInt(col[0]), Integer.parseInt(col[1])) == true) {
+                                    if (gestor_alumno.cantidad_filas() == 99) {
+                                        System.out.println("Inscripcion maxima alcanzada");
+                                        break;
+                                    } else {
+                                        gestor_alumno.asginar_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]));
+                                        asig_alum++;
+                                    }
 
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (Asignar[i].getId_alumno() == Asignar[j].getId_alumno() && Asignar[i].getId_curso() == Asignar[j].getId_curso()) {
-                                Asignar[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                                //System.out.println("porque su id es repetido");
-
+                                } else {
+                                    //cant += Integer.parseInt(col[0]) + ",";
+                                }
                             } else {
+                                //curso += Integer.parseInt(col[1]);
                             }
+
                         } else {
-
+                            //ids += Integer.parseInt(col[0]) + ",";
                         }
-                    } catch (Exception e) {
                     }
-                }
-            }
 
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (Asignar[i] == null) {
-
-                        for (int j = i; j < Asignar.length - 1; j++) {
-                            Asignar[j] = Asignar[j + 1];
-                        }
-                        Asignar[Asignar.length - 1] = null;
-                    } else {
-                    }
+                    gestor_alumno.print_asig();
                 } catch (Exception e) {
+
                 }
             }
-
-            //Agregar datos fuera de la carga solo si se borraron algunos datos incorrectos cargados
-            int aux = 1;
-            for (int i = 0; i <= Asignar.length; i++) {
-                try {
-
-                    if (Asignar[i] == null) {
-                        int dato = Asignar.length - i;
-                        int dato2 = i + dato + aux++;
-
-                        if (Rows[dato2] != null) {
-
-                            Columns = Rows[dato2].split(",");
-
-                            IdAlumno1 = Integer.parseInt(Columns[0]);
-                            IdCurso1 = Integer.parseInt(Columns[1]);
-
-                            Asignacion_alumno asignar1 = new Asignacion_alumno(IdAlumno1, IdCurso1, Nota1);
-                            Asignar[i] = asignar1;
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque excede la capacidad de carga :0");
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (Asignar[i].getId_alumno() == Asignar[j].getId_alumno() && Asignar[i].getId_alumno() == Asignar[j].getId_curso()) {
-                                Asignar[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "], ");
-                                //System.out.println("porque su id es repetido :0");
-
-                            } else {
-                            }
-                        } else {
-
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (Asignar[i] == null) {
-
-                        for (int j = i; j < Asignar.length - 1; j++) {
-                            Asignar[j] = Asignar[j + 1];
-                        }
-                        Asignar[Asignar.length - 1] = null;
-                    } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont3 = 0;
-            for (int i = 0; i <= Rows.length; i++) {
-                try {
-                    if (Asignar[i] != null) {
-                        ++Cont3;
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Imprimimos los datos ingresados
-            System.out.println("\nFueron asignados: " + Cont3 + " alumnos a sus cursos");
-
-            for (int i = 0; i < Cont2; i++) {
-                if (Asignar[i] != null) {
-                    /*System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
-                    System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
-                    System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
-                    System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
-                    System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));*/
-                }
-            }
-            System.out.println("\n");
-            Reader.close();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
-            System.out.println("pero se agregaron los datos correspondientes");
-            System.out.println("");
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
 
-    public static void AsignarProfesores(String Ruta) {
-        int IdProfesor1 = IdProfesor;
-        int IdCurso1 = IdCurso;
+    public static void A_profesores() {
+        if (profs > 0 && curs > 0) {
+            if (gestor_profesor.cantidad_filas_asig() == 29) {
+                System.out.println("Asignacion maxima alcanzada");
 
-        try {
-            File CSV = new File(Ruta);
-            Scanner Reader = new Scanner(CSV);
-            String Data = "";
-
-            while (Reader.hasNextLine()) {
-                Data += Reader.nextLine().replace(" ", "") + "\n";
-            }
-            String Rows[] = Data.split("\n");
-            Filas = Rows.length;
-
-            String Columns[] = Rows[0].split(",");
-            Columnas = Columns.length;
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont = 0;
-            int Cont2 = 0;
-            for (int i = 1; i < Rows.length; i++) {
-                if (Rows[i] != null) {
-                    ++Cont2;
-                }
-            }
-
-            //Llena el arreglo con datos del archivo
-            for (int i = 1; i <= Cont2; i++) {
+            } else {
                 try {
-                    try {
-                        if (Rows[i] != null) {
-
-                            Columns = Rows[i].split(",");
-
-                            IdProfesor1 = Integer.parseInt(Columns[0]);
-                            IdCurso1 = Integer.parseInt(Columns[1]);
-
-                            Asignacion_prof asignar2 = new Asignacion_prof(IdProfesor1, IdCurso1);
-                            Asignar2[Cont++] = asignar2;
+                    String filas[] = getFilas();
+                    String col[] = filas[0].split(",");
+                    for (int i = 1; i < filas.length; i++) {
+                        col = filas[i].split(",");
+                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","))) {
+                            System.out.println("pasa");
+                            continue;
                         }
-                    } catch (ArrayIndexOutOfBoundsException ex) {
-                        //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                        //System.out.println("porque excede la capacidad de carga");
-                    }
-                } catch (Exception e) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque un elemento no coincide");
-                    //Cont = Cont - 1;
+                        if (gestor_profesor.verificar_prof_id(Integer.parseInt(col[0])) == false) {
+                            if (gestor_curso.verificar_curso_id(Integer.parseInt(col[1])) == false) {
+                                if (gestor_profesor.verificar_asign(Integer.parseInt(col[0]), Integer.parseInt(col[1])) == true) {
+                                    if (gestor_profesor.cantidad_filas_asig() == 29) {
+                                        System.out.println("Asignacion maxima alcanzada");
+                                        break;
+                                    } else {
+                                        gestor_profesor.asginar_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]));
+                                        asig_prof++;
+                                    }
 
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                            if (Asignar2[i].getId_prof() == Asignar2[j].getId_prof() && Asignar2[i].getId_curso() == Asignar2[j].getId_curso()) {
-                                Asignar2[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                                //System.out.println("porque su id es repetido");
-
+                                } else {
+                                    //cant += Integer.parseInt(col[0]) + ",";
+                                }
                             } else {
+                                //curso += Integer.parseInt(col[1]);
                             }
+
                         } else {
-
+                            //ids += Integer.parseInt(col[0]) + ",";
                         }
-                    } catch (Exception e) {
                     }
-                }
-            }
 
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (Asignar2[i] == null) {
-
-                        for (int j = i; j < Asignar2.length - 1; j++) {
-                            Asignar2[j] = Asignar2[j + 1];
-                        }
-                        Asignar2[Asignar2.length - 1] = null;
-                    } else {
-                    }
+                gestor_profesor.print_asig();
                 } catch (Exception e) {
+
                 }
             }
-
-            //Agregar datos fuera de la carga solo si se borraron algunos datos incorrectos cargados
-            int aux = 1;
-            for (int i = 0; i <= Asignar2.length; i++) {
-                try {
-
-                    if (Asignar2[i] == null) {
-                        int dato = Asignar2.length - i;
-                        int dato2 = i + dato + aux++;
-
-                        if (Rows[dato2] != null) {
-
-                            Columns = Rows[dato2].split(",");
-
-                            IdProfesor1 = Integer.parseInt(Columns[0]);
-                            IdCurso1 = Integer.parseInt(Columns[1]);
-
-                            Asignacion_prof asignar2 = new Asignacion_prof(IdProfesor1, IdCurso1);
-                            Asignar2[i] = asignar2;
-                        }
-                    }
-                } catch (ArrayIndexOutOfBoundsException ex) {
-                    //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "],");
-                    //System.out.println("porque excede la capacidad de carga :0");
-                }
-            }
-
-            //imprimir Id repetido
-            for (int i = 0; i < Cont2; i++) {
-                for (int j = 0; j < Cont2; j++) {
-                    try {
-                        if (i != j) {
-                             if (Asignar2[i].getId_prof() == Asignar2[j].getId_prof() && Asignar2[i].getId_curso() == Asignar2[j].getId_curso()) {
-                                Asignar2[j] = null;
-                                //System.out.println("\nNo se pudo agregar el elemento en la fila " + "[" + i + "], ");
-                                //System.out.println("porque su id es repetido :0");
-
-                            } else {
-                            }
-                        } else {
-
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-            }
-
-            //Id repetido mover posiciones de todo el arreglo
-            for (int i = 0; i < Cont2; i++) {
-                try {
-                    if (Asignar2[i] == null) {
-
-                        for (int j = i; j < Asignar2.length - 1; j++) {
-                            Asignar2[j] = Asignar2[j + 1];
-                        }
-                        Asignar2[Asignar2.length - 1] = null;
-                    } else {
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Contador de filas en el archivo llenas de datos
-            int Cont3 = 0;
-            for (int i = 0; i <= Rows.length; i++) {
-                try {
-                    if (Asignar2[i] != null) {
-                        ++Cont3;
-                    }
-                } catch (Exception e) {
-                }
-            }
-
-            //Imprimimos los datos ingresados
-            System.out.println("\nFueron asignados: " + Cont3 + " profesores a sus cursos");
-
-            for (int i = 0; i < Cont2; i++) {
-                if (Asignar2[i] != null) {
-                    /*System.out.println("\nId: " + String.valueOf(alumnos[i].getId()));
-                    System.out.println("Carnet: " + String.valueOf(alumnos[i].getCarnet()));
-                    System.out.println("Nombre: " + String.valueOf(alumnos[i].getNombre()));
-                    System.out.println("Fecha de Nacimiento: " + String.valueOf(alumnos[i].getFecha()));
-                    System.out.println("Genero: " + String.valueOf(alumnos[i].getGenero()));*/
-                }
-            }
-            System.out.println("\n");
-            Reader.close();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("\nSe ingresó un archivo que excede la capacidad de carga, ");
-            System.out.println("pero se agregaron los datos correspondientes");
-            System.out.println("");
-        } catch (Exception e) {
-            System.out.println(e);
         }
     }
+
+    public static void ingresoNotas() {
+        if (curs > 0 && alum > 0) {
+            if (gestor_alumno.cantidad_filas_notas() == 199) {
+                System.out.println("Limite de asignacion de notas maxima alcanzada");
+
+            } else {
+                try {
+                    String filas[] = getFilas();
+                    String col[] = filas[0].split(",");
+                    for (int i = 1; i < filas.length; i++) {
+                        col = filas[i].split(",");
+                        if (!verificaciones.ComprobarFila_notas(filas[i].split(","))) {
+                            //System.out.println("pasa");
+                            continue;
+                        }
+                        if (gestor_alumno.verificar_asign(Integer.parseInt(col[0]), Integer.parseInt(col[1])) == false) {
+
+                            if (gestor_alumno.verificarIngreso(Integer.parseInt(col[0]), Integer.parseInt(col[1])) == true) {
+                                if (gestor_alumno.cantidad_filas_notas() == 199) {
+                                    System.out.println("Limite de asignacion de notas maxima alcanzada");
+                                    break;
+                                } else {
+                                    double nota = Double.parseDouble(col[2]);
+                                    gestor_alumno.asginarNota(Integer.parseInt(col[0]), Integer.parseInt(col[1]), nota);
+
+                                }
+
+                            } else {
+                                //cant += Integer.parseInt(col[0]) + ",";
+                            }
+                        }
+
+                    }
+                    gestor_alumno.printNota();
+
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+    }
+
+    public static String getContentOfFile(String pathname) {
+        File archive = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archive = new File(pathname);
+            fr = new FileReader(archive);
+            br = new BufferedReader(fr);
+            // Lectura del fichero
+            String content = "";
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                content += linea + "\n";
+            }
+            return content;
+        } catch (Exception e) {
+
+            System.out.println("No se ha podido encontrar el archivo");
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (NullPointerException e) {
+                System.out.println("No ha seleccionado ningún archivo");
+            } catch (Exception e) {
+                System.out.println();
+            }
+        }
+        return "";
+    }
+
+    public static String[] getFilas() {
+
+        String filas[];
+
+
+        System.out.println("*         Ingrese la ruta de la lista de alumnos   *");
+        Scanner ruta = new Scanner(System.in);
+        String auxi = ruta.next();
+
+        String prueba = getContentOfFile(auxi);
+        prueba.trim(); //QUITAMOS LOS ESPACIOS
+        String s = prueba.trim();
+
+
+        filas = s.split("\n");
+
+        String[] aux = new String[filas.length];
+
+        for (int i = 0; i < aux.length; i++) {
+            aux[i] = "";
+        }
+
+        for (int i = 0; i < filas.length; i++) {
+            String[] columnas = filas[i].split(",");
+            String cola = columnas[0].trim() + ",";
+
+
+            for (int j = 0; j < columnas.length; j++) {
+                String col = columnas[j].trim() + ",";
+
+                if (j != 2) {
+                    aux[i] += col;
+
+                } else aux[i] += col;
+
+            }
+
+        }
+
+
+
+        //System.out.println(filas[1]);
+        return aux;
+
+
+    }
+
+    // REPORTES
+
+    public static void repAlumnos() {
+        if (alum > 0) {
+            int filas = gestor_alumno.verificar_cant();
+
+            String[][] m = new String[filas][3];
+            for (int i = 0; i < m.length; i++) {
+                m[i][0] = String.valueOf(gestor_alumno.getCarnet(i));
+                m[i][1] = String.valueOf(gestor_alumno.getNombre(i));
+                m[i][2] = String.valueOf(gestor_alumno.getGenero(i));
+
+            }
+            int menor;
+
+            for (int x = 0; x < m.length; x++) {
+
+                for (int i = 0; i < m.length - x - 1; i++) {
+                    if (Integer.parseInt(m[i][0]) > Integer.parseInt(m[i + 1][0])) {
+                        int tmp = Integer.parseInt(m[i + 1][0]);
+                        String tmp_n = m[i + 1][1];
+                        String tmp_idc = m[i + 1][2];
+
+                        m[i + 1][0] = m[i][0];
+                        m[i + 1][1] = m[i][1];
+                        m[i + 1][2] = m[i][2];
+
+                        m[i][0] = String.valueOf(tmp);
+                        m[i][1] = tmp_n;
+                        m[i][2] = tmp_idc;
+
+                    }
+                }
+
+            }
+            for (int i = 0; i < m.length; i++) {
+                for (int j = 0; j < m[0].length; j++) {
+                    System.out.print(m[i][j] + ",");
+                }
+                System.out.println();
+            }
+
+            //
+            reportes.add_alumnos(m);
+
+        } else {
+            System.out.println("No se ha podido generar el reporte: Aun no se han cargado alumnos");
+        }
+    }
+
+    public static void repAsignacion_alumnos() {
+        if (asig_alum > 0) {
+            int filas = gestor_alumno.cantidad_filas();
+
+            String[][] m = new String[filas][4];
+            for (int i = 0; i < filas; i++) {
+                int id = gestor_alumno.get_id_al(i);
+                m[i][0] = String.valueOf(gestor_alumno.getCarnetAsig(id));
+                m[i][1] = gestor_alumno.buscar_nombre_alumn(id);
+                int idCurso = gestor_alumno.get_id_curso(i);
+                m[i][2] = String.valueOf(gestor_curso.buscarCodigo_clase(idCurso));
+                m[i][3] = gestor_curso.buscar_nombre_clase(idCurso);
+            }
+            int menor;
+
+            for (int x = 0; x < m.length; x++) {
+
+                for (int i = 0; i < m.length - x - 1; i++) {
+                    if (Integer.parseInt(m[i][0]) > Integer.parseInt(m[i + 1][0])) {
+                        int tmp = Integer.parseInt(m[i + 1][0]);
+                        String tmp_n = m[i + 1][1];
+                        int tmp_idc = Integer.parseInt(m[i + 1][2]);
+                        String c = m[i + 1][3];
+                        m[i + 1][0] = m[i][0];
+                        m[i + 1][1] = m[i][1];
+                        m[i + 1][2] = m[i][2];
+                        m[i + 1][3] = m[i][3];
+                        m[i][0] = String.valueOf(tmp);
+                        m[i][1] = tmp_n;
+                        m[i][2] = String.valueOf(tmp_idc);
+                        m[i][3] = c;
+                    }
+                }
+
+            }
+            for (int i = 0; i < m.length; i++) {
+                for (int j = 0; j < m[0].length; j++) {
+                    System.out.print(m[i][j] + ",");
+                }
+                System.out.println();
+            }
+            reportes.addAsignacion_alumnos(m);
+
+        } else {
+            System.out.println("Aun no se han asignado alumnos");
+        }
+    }
+
+    public static void repAsignacion_profesores() {
+        if (asig_prof > 0) {
+            int filas = gestor_profesor.cantidad_filas_asig();
+
+            String[][] m = new String[filas][4];
+            for (int i = 0; i < filas; i++) {
+
+                int id = gestor_profesor.get_id_prof(i);
+                m[i][0] = String.valueOf(gestor_profesor.buscar_Registro_prof(id));
+                m[i][1] = gestor_profesor.buscar_nombre_prof(id);
+                int idCurso = gestor_alumno.get_id_curso(i);
+                m[i][2] = String.valueOf(gestor_curso.buscarCodigo_clase(idCurso));
+                m[i][3] = gestor_curso.buscar_nombre_clase(idCurso);
+            }
+            int menor;
+
+            for (int x = 0; x < m.length; x++) {
+
+                for (int i = 0; i < m.length - x - 1; i++) {
+                    if (Integer.parseInt(m[i][0]) > Integer.parseInt(m[i + 1][0])) {
+                        int tmp = Integer.parseInt(m[i + 1][0]);
+                        String tmp_n = m[i + 1][1];
+                        int tmp_idc = Integer.parseInt(m[i + 1][2]);
+                        String c = m[i + 1][3];
+                        m[i + 1][0] = m[i][0];
+                        m[i + 1][1] = m[i][1];
+                        m[i + 1][2] = m[i][2];
+                        m[i + 1][3] = m[i][3];
+                        m[i][0] = String.valueOf(tmp);
+                        m[i][1] = tmp_n;
+                        m[i][2] = String.valueOf(tmp_idc);
+                        m[i][3] = c;
+                    }
+                }
+
+            }
+            for (int i = 0; i < m.length; i++) {
+                for (int j = 0; j < m[0].length; j++) {
+                    System.out.print(m[i][j] + ",");
+                }
+                System.out.println();
+            }
+            reportes.addAsignacion_alumnos(m);
+        } else {
+            System.out.println("Aun no se han asignado profesores");
+        }
+
+    }
+
+    public static void repCursos() {
+        if (asig_alum > 0) {
+            int filas = gestor_curso.verificar_cant();
+
+            String[][] m = new String[filas][3];
+            for (int i = 0; i < m.length; i++) {
+                int id = gestor_curso.getIdcurso(i);
+                m[i][0] = String.valueOf(gestor_curso.buscarCodigo_clase(id));
+                m[i][1] = String.valueOf(gestor_curso.buscar_nombre_clase(id));
+                m[i][2] = String.valueOf(gestor_alumno.cantidad_filas_asig(id));
+
+            }
+            int menor;
+
+            for (int x = 0; x < m.length; x++) {
+
+                for (int i = 0; i < m.length - x - 1; i++) {
+                    if (Integer.parseInt(m[i][0]) > Integer.parseInt(m[i + 1][0])) {
+                        int tmp = Integer.parseInt(m[i + 1][0]);
+                        String tmp_n = m[i + 1][1];
+                        String tmp_idc = m[i + 1][2];
+
+                        m[i + 1][0] = m[i][0];
+                        m[i + 1][1] = m[i][1];
+                        m[i + 1][2] = m[i][2];
+
+                        m[i][0] = String.valueOf(tmp);
+                        m[i][1] = tmp_n;
+                        m[i][2] = tmp_idc;
+
+                    }
+                }
+
+            }
+            for (int i = 0; i < m.length; i++) {
+                for (int j = 0; j < m[0].length; j++) {
+                    System.out.print(m[i][j] + ",");
+                }
+                System.out.println();
+            }
+
+            //
+            reportes.addCursos(m);
+
+        } else {
+            System.out.println("No se ha podido generar el reporte: Aun no se han cargado alumnos");
+        }
+    }
+
+    public static void repCurso() {
+
+        boolean sta = false;
+        String encabezado = "";
+        Scanner sc = new Scanner(System.in);
+        do {
+            System.out.println("|''''''''''''''' Reporte de cursos ''''''''''''''''''''''''''|");
+            gestor_curso.print_cursos();
+            System.out.println("Ingrese el ID del curso");
+            int or = sc.nextInt();
+            int contador = 0;
+            if (gestor_curso.verificar_curso_id(or) == false) {
+                encabezado += "Curso " + gestor_curso.buscar_nombre_clase(or) + "<br>Impartido por:";
+
+
+                if (asig_prof > 0) {
+                    int[] ids = gestor_profesor.cant_getIdprof_curso(or);
+                    for (int i = 0; i < ids.length; i++) {
+                        encabezado += gestor_profesor.buscar_nombre_prof(ids[i]);
+                        encabezado += " Registro: " + String.valueOf(gestor_profesor.buscar_Registro_prof(ids[i])) + ", ";
+                    }
+
+
+                }
+
+
+                int ids[] = gestor_alumno.getIds_encurso(or);
+                String m[][] = new String[ids.length][4];
+                int c = 0;
+                for (int i = 0; i < ids.length; i++) {
+                    m[i][0] = String.valueOf(gestor_alumno.getCarnetAsig(ids[i]));
+                    m[i][1] = gestor_alumno.buscar_nombre_alumn(ids[i]);
+
+                    m[i][2] = String.valueOf(gestor_alumno.buscarNota(ids[i], or));
+                    double nota = gestor_alumno.buscarNota(ids[i], or);
+                    if (nota >= 61) {
+                        m[i][3] = "Aprobado";
+                    } else {
+                        m[i][3] = "Reprobado";
+                    }
+
+                }
+
+
+                for (int i = 0; i < m.length; i++) {
+                    for (int j = 0; j < m[0].length; j++) {
+                        System.out.print(m[i][j] + ",");
+                    }
+                    System.out.println();
+                }
+
+                reportes.addCurso(encabezado, m);
+
+            } else {
+                System.out.println("No se ha encontrado el curso solicitado");
+                sta = false;
+            }
+        } while (sta == false);
+    }
+
+    public static void repTop5() {
+
+        boolean sta = false;
+        String encabezado = "";
+        Scanner sc = new Scanner(System.in);
+        do {
+            System.out.println("|''''''''''''''' Top 5 mejores Alumnos ''''''''''''''''''''''''''|");
+            gestor_curso.print_cursos_codigo();
+            System.out.println("Ingrese el codigo del curso");
+            int or = sc.nextInt();
+            int contador = 0;
+            if (gestor_curso.verificar_curso_codigo(or) == false) {
+                int id = gestor_curso.buscarId_clase(or);
+                encabezado += "Curso " + gestor_curso.buscar_nombre_clase(id) + "<br>Impartido por:";
+
+
+                if (asig_prof > 0) {
+                    int[] ids = gestor_profesor.cant_getIdprof_curso(id);
+                    for (int i = 0; i < ids.length; i++) {
+                        encabezado += gestor_profesor.buscar_nombre_prof(ids[i]);
+                        encabezado += " Registro: " + String.valueOf(gestor_profesor.buscar_Registro_prof(ids[i])) + ", ";
+                    }
+
+
+                }
+
+
+                int ids[] = gestor_alumno.getIds_encurso(or);
+                String m[][] = new String[ids.length][3];
+
+                for (int i = 0; i < ids.length; i++) {
+                    m[i][0] = String.valueOf(gestor_alumno.getCarnetAsig(ids[i]));
+                    m[i][1] = gestor_alumno.buscar_nombre_alumn(ids[i]);
+
+                    m[i][2] = String.valueOf(gestor_alumno.buscarNota(ids[i], or));
+
+
+                }
+                for (int x = 0; x < m.length; x++) {
+
+                    for (int i = 0; i < m.length - x - 1; i++) {
+                        if (Double.parseDouble(m[i][2]) < Double.parseDouble(m[i + 1][2])) {
+                            int tmp = Integer.parseInt(m[i + 1][0]);
+                            String tmp_n = m[i + 1][1];
+                            double tmp_idc = Double.parseDouble(m[i + 1][2]);
+                            m[i + 1][0] = m[i][0];
+                            m[i + 1][1] = m[i][1];
+                            m[i + 1][2] = m[i][2];
+                            m[i][0] = String.valueOf(tmp);
+                            m[i][1] = tmp_n;
+                            m[i][2] = String.valueOf(tmp_idc);
+
+                        }
+                    }
+
+                }
+
+
+                for (int i = 0; i < m.length; i++) {
+                    for (int j = 0; j < m[0].length; j++) {
+                        System.out.print(m[i][j] + ",");
+                    }
+                    System.out.println();
+                }
+
+                reportes.addTop5(encabezado, m);
+
+            } else {
+                System.out.println("No se ha encontrado el curso solicitado");
+                sta = false;
+            }
+        } while (sta == false);
+
+    }
+
+
 }

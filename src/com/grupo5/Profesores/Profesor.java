@@ -18,9 +18,9 @@ public class Profesor {
     private String Nombre;
     private String Fecha_nacimiento;
     private String Fecha_contratacion;
-    private String Genero;
+    private char Genero;
     
-    public Profesor(int id, int registro,String nombre,String fecha_nacimiento,String fecha_contratacion, String genero){
+    public Profesor(int id, int registro,String nombre,String fecha_nacimiento,String fecha_contratacion, char genero){
         this.setId(id);
         this.setRegistro(registro);
         this.setNombre(nombre);
@@ -70,11 +70,11 @@ public class Profesor {
         Fecha_contratacion = fecha_contratacion;
     }
 
-    public String getGenero() {
+    public char getGenero() {
         return Genero;
     }
 
-    public void setGenero(String genero) {
+    public void setGenero(char genero) {
         Genero = genero;
     }
 }

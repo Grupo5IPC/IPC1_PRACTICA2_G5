@@ -6,21 +6,20 @@
 package com.grupo5.Profesores;
 
 /**
- *
  * @author Ludwin
  */
 public class Gestor_profesor {
 
     Profesor[] profesores;
-    Asignacion_prof [] asignaciones;
+    Asignacion_prof[] asignaciones;
 
     public Gestor_profesor() {
         profesores = new Profesor[20];
         asignaciones = new Asignacion_prof[30];
     }
 
-    public boolean Ins_prof(int id, int registro,String nombre,String fecha_nacimiento,String fecha_contratacion, String genero) {
-        for (int i = 0; i < 20; i++) {
+    public boolean Ins_prof(int id, int registro, String nombre, String fecha_nacimiento, String fecha_contratacion, char genero) {
+        for (int i = 0; i < profesores.length; i++) {
             if (profesores[i] == null) {
                 profesores[i] = new Profesor(id, registro, nombre, fecha_nacimiento, fecha_contratacion, genero);
                 return true;
@@ -29,11 +28,11 @@ public class Gestor_profesor {
         return false;
     }
 
-    public boolean verificar_prof(int id) {
+    public boolean verificar_prof_id(int id) {
         boolean s = false;
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < profesores.length; i++) {
             if (profesores[0] == null) {
-               
+
                 return true;
 
             } else {
@@ -50,12 +49,34 @@ public class Gestor_profesor {
         return s;
     }
 
+    public boolean verificar_prof_registro(int registro) {
+        boolean s = false;
+        for (int i = 0; i < profesores.length; i++) {
+            if (profesores[0] == null) {
+
+                return true;
+
+            } else {
+                if (profesores[i] != null) {
+                    if (profesores[i].getRegistro() == registro) {
+                        s = false;
+                        break;
+                    } else {
+                        s = true;
+                    }
+                }
+            }
+        }
+        return s;
+    }
+
     public void print_profesores() {
         System.out.println("Profesores en el sistema:");
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < profesores.length; i++) {
             if (profesores[i] != null) {
 
                 System.out.print(profesores[i].getId() + ",");
+                System.out.print(profesores[i].getRegistro() + ",");
                 System.out.print(profesores[i].getNombre() + ",");
 
                 System.out.println();
@@ -63,6 +84,7 @@ public class Gestor_profesor {
 
         }
     }
+
     public boolean asginar_curso(int id_a, int id_c) {
         for (int i = 0; i < 30; i++) {
             if (asignaciones[i] == null) {
@@ -75,7 +97,7 @@ public class Gestor_profesor {
 
     public boolean verificar_asign(int id_a, int id_c) {
         boolean s = false;
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < asignaciones.length; i++) {
             if (asignaciones[0] == null) {
                 s = true;
                 return s;
@@ -95,11 +117,11 @@ public class Gestor_profesor {
 
         return s;
     }
-    
-    public int verificar_cant_asign(int id_a){
+
+    public int verificar_cant_asign(int id_a) {
         int curso = 0;
         for (int i = 0; i < 30; i++) {
-            if (asignaciones[i]!= null) {
+            if (asignaciones[i] != null) {
                 if (asignaciones[i].getId_prof() == id_a) {
                     curso++;
                 }
@@ -107,37 +129,57 @@ public class Gestor_profesor {
         }
         return curso;
     }
-    public void print_asig(){
+
+    public void print_asig() {
         System.out.println("Profesor y cursos asignados:");
         for (int i = 0; i < 30; i++) {
             if (asignaciones[i] != null) {
 
-                System.out.print(asignaciones[i].getId_prof()+ ",");
-                System.out.println(asignaciones[i].getId_curso()+ ",");
+                System.out.print(asignaciones[i].getId_prof() + ",");
+                System.out.println(asignaciones[i].getId_curso() + ",");
 
-          
+
             }
 
         }
     }
-    public int get_id_prof(int id){
-    
+
+    public int get_id_prof(int id) {
+
         return asignaciones[id].getId_prof();
     }
-    public int get_id_curso(int id){
-    
+
+    public int buscar_Registro_prof(int id) {
+        int registro = 0;
+        for (int i = 0; i < 20; i++) {
+
+            if (profesores[i] != null) {
+                if (profesores[i].getId() == id) {
+                    registro = profesores[i].getRegistro();
+                    break;
+                }
+            }
+        }
+        return registro;
+    }
+
+
+    public int get_id_curso(int id) {
+
         return asignaciones[id].getId_curso();
     }
-    public int cantidad_filas(){
-        int cant =0;
+
+    public int cantidad_filas_asig() {
+        int cant = 0;
         for (int i = 0; i < 30; i++) {
             if (asignaciones[i] != null) {
                 cant++;
-                
+
             }
         }
         return cant;
     }
+
     //  FALTA REFORMULAR Y TESTEAR, NO DESCOMENTAR
     /*
     public void ordenar() {
@@ -200,29 +242,63 @@ public class Gestor_profesor {
     }
 
      */
-    public String buscar_nombre_prof(int id){
-        String nombre="";
+    public String buscar_nombre_prof(int id) {
+        String nombre = "";
         for (int i = 0; i < 20; i++) {
-            
-                if (profesores[i] != null) {
-                    if (profesores[i].getId() == id) {
-                       nombre = profesores[i].getNombre();
-                        break;
-                    } 
+
+            if (profesores[i] != null) {
+                if (profesores[i].getId() == id) {
+                    nombre = profesores[i].getNombre();
+                    break;
                 }
+            }
         }
         return nombre;
     }
-    public int verificar_cant(){
-        int cantidad = 0;
-        for (int i = 0; i < 20;i++) {
-            if (profesores[i]!= null) {
-                 
-                    cantidad++;
+
+
+
+    public int[] cant_getIdprof_curso(int idCurso) {
+        int filas = 0;
+
+        for (int i = 0; i < asignaciones.length; i++) {
+
+            if (asignaciones[i] != null) {
+                if (asignaciones[i].getId_curso() == idCurso) {
+                    filas++;
                 }
             }
+        }
+
+        int[] arreglo = new int[filas];
+        int auxiliar = 0;
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < asignaciones.length; j++) {
+                if (asignaciones[j] != null) {
+                    if (asignaciones[j].getId_curso() == idCurso) {
+                        if (auxiliar != arreglo[i]) {
+                            arreglo[i] = asignaciones[j].getId_prof();
+                            auxiliar = arreglo[i];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return arreglo;
+    }
+
+    public int verificar_cant() {
+        int cantidad = 0;
+        for (int i = 0; i < profesores.length; i++) {
+            if (profesores[i] != null) {
+
+                cantidad++;
+            }
+        }
 
         return cantidad;
     }
-    
+
 }

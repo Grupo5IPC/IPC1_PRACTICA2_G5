@@ -12,12 +12,12 @@ package com.grupo5.Alumnos;
 public class Asignacion_alumno {
     private int Id_alumno;
     private int Id_curso;
-    private double Nota;
+
     
-    public Asignacion_alumno(int id_a, int id_c,double nota ){
+    public Asignacion_alumno(int id_a, int id_c ){
         this.Id_alumno = id_a;
         this.Id_curso = id_c;
-        this.Nota = nota;
+
     }
 
     /**
@@ -48,17 +48,5 @@ public class Asignacion_alumno {
         this.Id_curso = Id_curso;
     }
 
-    /**
-     * @return the Nota
-     */
-    public double getNota() {
-        return Nota;
-    }
 
-    /**
-     * @param Nota the Nota to set
-     */
-    public void setNota(double Nota) {
-        this.Nota = Nota;
-    }
 }
