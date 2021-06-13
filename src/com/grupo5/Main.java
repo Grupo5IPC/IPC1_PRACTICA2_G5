@@ -46,15 +46,16 @@ public class Main {
     }
 
     public static void menuPrincipal() {
+        Scanner login = new Scanner(System.in);
         Scanner MenuPrincipal = new Scanner(System.in);
         try {
             System.out.println("*******************************");
             System.out.println("*           LOGIN             *");
             System.out.println("*******************************");
             System.out.println("* Ingrese su usuario          *");
-            String user = MenuPrincipal.nextLine();
+            String user = login.nextLine();
             System.out.println("* Ingrese su contraseña       *");
-            String pass = MenuPrincipal.nextLine();
+            String pass = login.nextLine();
             System.out.println("*******************************");
             int Opciones = 0;
             if (user.equals("admin") && pass.equals("admin")) {
