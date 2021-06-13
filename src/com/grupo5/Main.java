@@ -204,8 +204,12 @@ public class Main {
         String npass2 = confirmarPass.nextLine();
         System.out.println("*******************************");
         if ( npass.equals(npass2)) {
-            gestor_usuarios.Ins_usu(nuser, npass);
-            System.out.println("\nAgregado corretamente \n");
+            if (gestor_usuarios.verificar(nuser,npass)) {
+                gestor_usuarios.Ins_usu(nuser, npass);
+                System.out.println("\nAgregado corretamente \n");
+            }else{
+                System.out.println("El usuario ya existe, intentelo de nuevo");
+            }
         } else {
             System.out.println("Error: ocurrio un problema en su registro");
             System.out.println("Vuelva a intentarlo");
@@ -214,7 +218,6 @@ public class Main {
 
     //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-
 
     public static void C_alumnos() {
         String aux = Log;
@@ -252,6 +255,9 @@ public class Main {
                     } else {
                         log.addCuerpo("El Carnet o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentra registrado");
                     }
+                }
+                if (cont>0){
+                    printErrores();
                 }
                 gestor_alumno.print_alumnos();
 
@@ -297,8 +303,11 @@ public class Main {
                             profs++;
                         }
                     } else {
-                        log.addCuerpo("El Registro o ID ingresado: \"+col[1]+\", \"+col[0]+\" ya se encuentra registrado, no se ha podido cargar ");
+                        log.addCuerpo("El Registro o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentra registrado, no se ha podido cargar ");
                     }
+                }
+                if (cont>0){
+                    printErrores();
                 }
                 gestor_profesor.print_profesores();
 
@@ -345,6 +354,9 @@ public class Main {
                         log.addCuerpo("El Codigo o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentran registrado, no se ha podido cargar ");
                     }
                 }
+                if (cont>0){
+                    printErrores();
+                }
                 gestor_curso.print_cursos();
 
 
@@ -359,6 +371,8 @@ public class Main {
 
     public static void A_alumnos() {
         int cont = 0;
+        String cadena ="";
+        String ids = "";
         if (curs > 0 && alum > 0) {
             if (gestor_alumno.cantidad_filas() == 199) {
                 System.out.println("Inscripcion maxima alcanzada");
@@ -388,15 +402,28 @@ public class Main {
                                     }
 
                                 } else {
-                                    //cant += Integer.parseInt(col[0]) + ",";
+                                    cadena += col[0] +","+col[1];
                                 }
                             } else {
-                                //curso += Integer.parseInt(col[1]);
+                                ids += col[0] +"," + col[1];
+                                log.addCuerpo("EL curso con ID "+ col[1]+" no existe, el alumno con ID "+ col[0]+" no se asigno");
                             }
 
                         } else {
-                            //ids += Integer.parseInt(col[0]) + ",";
+                            ids += col[0] +"," + col[1];
+                            log.addCuerpo("EL alumno con ID "+ col[0]+", no existe, no se realizo asignacion a "+ col[1]);
                         }
+                    }
+                    if (!ids.equals("")){
+                        System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo: ");
+                        System.out.println(ids);
+                    }
+                    if (!cadena.equals("")){
+                        System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque ya se encontraban realizadas: ");
+                        System.out.println(cadena);
+                    }
+                    if (cont>0){
+                        printErrores();
                     }
 
                     gestor_alumno.print_asig();
@@ -408,6 +435,9 @@ public class Main {
     }
 
     public static void A_profesores() {
+        int cont = 0;
+        String cadena ="";
+        String ids = "";
         if (profs > 0 && curs > 0) {
             if (gestor_profesor.cantidad_filas_asig() == 29) {
                 System.out.println("Asignacion maxima alcanzada");
@@ -418,8 +448,11 @@ public class Main {
                     String col[] = filas[0].split(",");
                     for (int i = 1; i < filas.length; i++) {
                         col = filas[i].split(",");
-                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","))) {
-                            System.out.println("pasa");
+                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","),2,cont,i)) {
+                            //System.out.println("pasa");
+                            if (cont == 0){
+                                cont ++;
+                            }
                             continue;
                         }
                         if (gestor_profesor.verificar_prof_id(Integer.parseInt(col[0])) == false) {
@@ -434,18 +467,31 @@ public class Main {
                                     }
 
                                 } else {
-                                    //cant += Integer.parseInt(col[0]) + ",";
+                                    cadena += col[0] +","+col[1];
                                 }
                             } else {
-                                //curso += Integer.parseInt(col[1]);
+                                ids += col[0] +"," + col[1];
+                                log.addCuerpo("EL curso con ID "+ col[1]+" no existe, el profesor con ID "+ col[0]+" no se asigno");
                             }
 
                         } else {
-                            //ids += Integer.parseInt(col[0]) + ",";
+                            ids += col[0] +"," + col[1];
+                            log.addCuerpo("EL profesor con ID "+ col[0]+", no existe, no se realizo asignacion a "+ col[1]);
                         }
                     }
+                    if (!ids.equals("")){
+                        System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo: ");
+                        System.out.println(ids);
+                    }
+                    if (!cadena.equals("")){
+                        System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque ya se encontraban realizadas: ");
+                        System.out.println(cadena);
+                    }
+                    if (cont>0){
+                        printErrores();
+                    }
 
-                gestor_profesor.print_asig();
+                    gestor_profesor.print_asig();
                 } catch (Exception e) {
 
                 }
@@ -454,6 +500,8 @@ public class Main {
     }
 
     public static void ingresoNotas() {
+        int cont = 0;
+        String ids = "", cadena = "";
         if (curs > 0 && alum > 0) {
             if (gestor_alumno.cantidad_filas_notas() == 199) {
                 System.out.println("Limite de asignacion de notas maxima alcanzada");
@@ -464,8 +512,11 @@ public class Main {
                     String col[] = filas[0].split(",");
                     for (int i = 1; i < filas.length; i++) {
                         col = filas[i].split(",");
-                        if (!verificaciones.ComprobarFila_notas(filas[i].split(","))) {
+                        if (!verificaciones.ComprobarFila_notas(filas[i].split(","), cont, i)) {
                             //System.out.println("pasa");
+                            if (cont == 0){
+                                cont++;
+                            }
                             continue;
                         }
                         if (gestor_alumno.verificar_asign(Integer.parseInt(col[0]), Integer.parseInt(col[1])) == false) {
@@ -481,10 +532,26 @@ public class Main {
                                 }
 
                             } else {
-                                //cant += Integer.parseInt(col[0]) + ",";
+                                cadena += col[0] + ", "+ col[1]+", "+col[2] +"\n";
                             }
+                        }else{
+                            ids += col[0] + ", "+ col[1]+", "+col[2] +"\n";
+                            log.addCuerpo("EL alumno con ID "+ col[0]+", no esta asignado a "+col[1]);
+
                         }
 
+                    }
+                    if (!ids.equals("")){
+                        System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque los alumnos no estan asignados: ");
+                        System.out.println(ids);
+
+                    }
+                    if (!cadena.equals("")){
+                        System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque los alumnos ya tienen nota ingresada: ");
+                        System.out.println(ids);
+                    }
+                    if (cont>0){
+                        printErrores();
                     }
                     gestor_alumno.printNota();
 
@@ -495,7 +562,6 @@ public class Main {
         }
 
     }
-
     public static String getContentOfFile(String pathname) {
         File archive = null;
         FileReader fr = null;
@@ -910,6 +976,10 @@ public class Main {
             }
         } while (sta == false);
 
+    }
+    public static void printErrores(){
+        System.out.println("----------------------------------------------------");
+        System.out.println("Se produjeron excepciones durante este Proceso, verificar el registro ubicado en Log\\"+log.n_reporte+".txt");
     }
 
 
