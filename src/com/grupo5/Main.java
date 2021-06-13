@@ -205,7 +205,7 @@ public class Main {
         String npass2 = confirmarPass.nextLine();
         System.out.println("*******************************");
         if ( npass.equals(npass2)) {
-            if (gestor_usuarios.verificar(nuser,npass)) {
+            if (gestor_usuarios.verificar(nuser,npass) == false) {
                 gestor_usuarios.Ins_usu(nuser, npass);
                 System.out.println("\nAgregado corretamente \n");
             }else{

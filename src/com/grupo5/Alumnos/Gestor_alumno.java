@@ -413,7 +413,7 @@ public class Gestor_alumno {
                 cantidad++;
             }
         }
-        System.out.println(cantidad);
+        //System.out.println(cantidad);
         return cantidad;
     }
 
