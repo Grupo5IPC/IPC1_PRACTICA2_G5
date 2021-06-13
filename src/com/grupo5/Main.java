@@ -323,7 +323,7 @@ public class Main {
                 for (int i = 1; i < filas.length; i++) {
                     col = filas[i].split(",");
                     if (!verificaciones.ComprobarFila_curso(filas[i].split(","), cont , i)) {
-                        System.out.println("pasa");
+                        //System.out.println("pasa");
                         if (cont == 0){
                             cont++;
                         }
@@ -332,6 +332,8 @@ public class Main {
 
                     if ((gestor_curso.verificar_curso_codigo(Integer.parseInt(col[1]))) && (gestor_curso.verificar_curso_id(Integer.parseInt(col[0])))) {
                         if (gestor_profesor.verificar_cant() == 14) {
+                            System.out.println("Limite de carga alcanzado ");
+                            break;
                         } else {
 
                             gestor_curso.Ins_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]), col[2]);
@@ -355,6 +357,7 @@ public class Main {
     }
 
     public static void A_alumnos() {
+        int cont = 0;
         if (curs > 0 && alum > 0) {
             if (gestor_alumno.cantidad_filas() == 199) {
                 System.out.println("Inscripcion maxima alcanzada");
@@ -365,8 +368,11 @@ public class Main {
                     String col[] = filas[0].split(",");
                     for (int i = 1; i < filas.length; i++) {
                         col = filas[i].split(",");
-                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","))) {
-                            System.out.println("pasa");
+                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","), 1,cont, i)) {
+                            if (cont == 0){
+                                cont ++;
+                            }
+                            //System.out.println("pasa");
                             continue;
                         }
                         if (gestor_alumno.verificar_alum_id(Integer.parseInt(col[0])) == false) {

@@ -72,7 +72,7 @@ public class Handler {
                     cont++;
                 }
                 if (verficarEntero(fila[1].toString()) != true){
-                    log.addCuerpo("Linea "+linea+": Error al convertir el Carnet \""+fila[1]+" \" ");
+                    log.addCuerpo("Linea "+linea+": Error al convertir el Registro \""+fila[1]+" \" ");
                     cont++;
                 }
                 if (verificarChar(fila[6]) == false){
@@ -132,15 +132,28 @@ public class Handler {
 
         return state;
     }
-    public  boolean ComprobarFila_asignacion( String fila[]) {
+
+    public  boolean ComprobarFila_asignacion( String fila[], int modo, int cont2, int linea) {
         boolean state = true;
         int cont = 0;
+        String nombre;
+        if (modo == 1){
+            nombre = "Alumnos";
+        }else{
+            nombre = "Profesores";
+        }
+        if (cont2 == 0){
+
+            log.add_Titulo("\t Asignacion de "+nombre+"  ");
+        }
         if (fila.length == 2){
             try{
                 if (verficarEntero(fila[0].toString()) != true ){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[0]+" \" ");
                     cont++;
                 }
                 if (verficarEntero(fila[1].toString()) != true){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[1]+" \" ");
                     cont++;
                 }
 
@@ -153,7 +166,7 @@ public class Handler {
                 state = false;
             }
         }else{
-
+            log.addCuerpo("La asignacion en la linea "+linea +" no se puedo efectuar, verifique que todos los campos sean correctos");
             state = false;
         }
         //System.out.println(state);
