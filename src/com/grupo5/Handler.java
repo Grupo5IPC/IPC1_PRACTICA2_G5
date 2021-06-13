@@ -12,11 +12,12 @@ public class Handler {
     }
 
 
-    public  boolean ComprobarFila_Alumno( String fila[], int cont2) {
+    public  boolean ComprobarFila_Alumno( String fila[], int cont2, int linea) {
         boolean state = true;
         int cont = 0;
         if (cont2 == 0){
-            log.add_Titulo("\\s Carga de Alumnos + \n");
+            log.add_Titulo("\t Carga de Alumnos  ");
+
         }
         if (fila.length == 5){
 
@@ -24,15 +25,15 @@ public class Handler {
                 //System.out.println("ID: "+ fila[0]);
 
                if (verficarEntero(fila[0].toString()) != true ){
-                    log.addCuerpo("Error al convertir el ID \""+fila[0]+" \" ");
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[0]+" \" ");
                    cont++;
                }
                if (verficarEntero(fila[1].toString()) != true){
-                   log.addCuerpo("Error al convertir el ID \""+fila[0]+" \" ");
+                   log.addCuerpo("Linea "+linea+": Error al convertir el Carnet \""+fila[1]+" \" ");
                    cont++;
                }
                if (verificarChar(fila[4]) == false){
-                    log.addCuerpo("El genero ingresado debe ser \"M\" o \"F\": "+fila[4]+"");
+                    log.addCuerpo("Linea "+linea+": El genero ingresado debe ser \"M\" o \"F\": "+fila[4]+"");
                    cont++;
                }
                if (cont >0){
@@ -54,26 +55,38 @@ public class Handler {
         return state;
     }
 
-    public  boolean ComprobarFilaprofesor( String fila[]) {
+    public  boolean ComprobarFilaprofesor( String fila[], int cont2, int linea) {
         boolean state = true;
         int cont = 0;
+        if (cont2 == 0){
+            log.add_Titulo("\t Carga de Profesores  ");
+
+        }
         if (fila.length == 6){
+
             try{
-                if (verficarEntero(fila[0]) != true ){
+                //System.out.println("ID: "+ fila[0]);
+
+                if (verficarEntero(fila[0].toString()) != true ){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[0]+" \" ");
                     cont++;
                 }
                 if (verficarEntero(fila[1].toString()) != true){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el Carnet \""+fila[1]+" \" ");
                     cont++;
                 }
-                if (verificarChar(fila[5]) == false){
+                if (verificarChar(fila[6]) == false){
+                    log.addCuerpo("Linea "+linea+": El genero ingresado debe ser \"M\" o \"F\": "+fila[6]+"");
                     cont++;
                 }
                 if (cont >0){
+
                     state = false;
                 }
 
 
             }catch (Exception e){
+                log.addCuerpo("El profesor con ID "+fila[0]+" no puede ser ingresado, verifique que todos los campos sean correctos");
                 state = false;
             }
         }else{
@@ -84,15 +97,22 @@ public class Handler {
 
         return state;
     }
-    public  boolean ComprobarFila_curso( String fila[]) {
+
+    public  boolean ComprobarFila_curso( String fila[], int cont2, int linea) {
         boolean state = true;
         int cont = 0;
+        if (cont2 == 0){
+            log.add_Titulo("\t Carga de Cursos  ");
+
+        }
         if (fila.length == 3){
             try{
                 if (verficarEntero(fila[0].toString()) != true ){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[0]+" \" ");
                     cont++;
                 }
                 if (verficarEntero(fila[1].toString()) != true){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el Codigo \""+fila[0]+" \" ");
                     cont++;
                 }
 
@@ -105,7 +125,7 @@ public class Handler {
                 state = false;
             }
         }else{
-
+            log.addCuerpo("El curso con ID "+fila[0]+" no puede ser ingresado, verifique que todos los campos sean correctos");
             state = false;
         }
         //System.out.println(state);

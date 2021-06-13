@@ -227,7 +227,7 @@ public class Main {
 
                 for (int i = 0; i < filas.length; i++) {
                     col = filas[i].split(",");
-                    if (!verificaciones.ComprobarFila_Alumno(filas[i].split(","), cont)) {
+                    if (!verificaciones.ComprobarFila_Alumno(filas[i].split(","), cont, i)) {
                         if (cont == 0){
 
 
@@ -275,7 +275,7 @@ public class Main {
 
                 for (int i = 1; i < filas.length; i++) {
                     col = filas[i].split(",");
-                    if (!verificaciones.ComprobarFilaprofesor(filas[i].split(","))) {
+                    if (!verificaciones.ComprobarFilaprofesor(filas[i].split(","), cont , i)) {
                         if (cont == 0){
 
 
@@ -296,7 +296,7 @@ public class Main {
                             profs++;
                         }
                     } else {
-                        Log += Integer.parseInt(col[1]) + ",";
+                        log.addCuerpo("El Registro o ID ingresado: \"+col[1]+\", \"+col[0]+\" ya se encuentra registrado, no se ha podido cargar ");
                     }
                 }
                 gestor_profesor.print_profesores();
@@ -312,6 +312,7 @@ public class Main {
     }
 
     public static void C_cursos() {
+        int cont = 0;
         if (gestor_curso.verificar_cant() == 14) {
             System.out.println("Ya se han ingresado la cantidad maxima de cursos");
         } else {
@@ -321,8 +322,11 @@ public class Main {
 
                 for (int i = 1; i < filas.length; i++) {
                     col = filas[i].split(",");
-                    if (!verificaciones.ComprobarFila_curso(filas[i].split(","))) {
+                    if (!verificaciones.ComprobarFila_curso(filas[i].split(","), cont , i)) {
                         System.out.println("pasa");
+                        if (cont == 0){
+                            cont++;
+                        }
                         continue;
                     }
 
@@ -335,7 +339,7 @@ public class Main {
 
                         }
                     } else {
-                        Log += Integer.parseInt(col[1]) + ",";
+                        log.addCuerpo("El Codigo o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentran registrado, no se ha podido cargar ");
                     }
                 }
                 gestor_curso.print_cursos();

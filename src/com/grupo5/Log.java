@@ -42,7 +42,7 @@ public class Log {
 
     public static void add_Titulo(String cadena){
         try {
-            FileWriter fn = new FileWriter("Log/" + n_reporte + ".txt", false);
+            FileWriter fn = new FileWriter("Log/" + n_reporte + ".txt", true);
             Calendar fecha = Calendar.getInstance();
             int año = fecha.get(Calendar.YEAR);
             int mes = fecha.get(Calendar.MONTH);
@@ -50,7 +50,7 @@ public class Log {
             int hora = fecha.get(Calendar.HOUR_OF_DAY);
             int minutos = fecha.get(Calendar.MINUTE);
             String aux = dia + "-" + mes + "-" + año + " " + hora + "." + minutos+": ";
-            String texto = cadena + " " + aux;
+            String texto = cadena + " " + aux +"\n";
             fn.write(texto);
             fn.close();
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class Log {
 
     public static void addCuerpo(String cadena){
         try {
-            FileWriter fn = new FileWriter("Log/" + n_reporte + ".txt", false);
+            FileWriter fn = new FileWriter("Log/" + n_reporte + ".txt", true);
             Calendar fecha = Calendar.getInstance();
             int año = fecha.get(Calendar.YEAR);
             int mes = fecha.get(Calendar.MONTH);
