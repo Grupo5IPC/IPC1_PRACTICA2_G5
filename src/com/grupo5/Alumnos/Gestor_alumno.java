@@ -51,6 +51,7 @@ public class Gestor_alumno {
         }
         return s;
     }
+
     public boolean verificar_alum_id(int id) {
         boolean s = false;
         for (int i = 0; i < alumnos.length; i++) {
@@ -88,10 +89,10 @@ public class Gestor_alumno {
         }
     }
 
-    public boolean asginar_curso(int id_a, int id_c) {
+    public boolean asginar_curso(int id_a, int id_c, String fecha) {
         for (int i = 0; i < asignaciones.length; i++) {
             if (asignaciones[i] == null) {
-                asignaciones[i] = new Asignacion_alumno(id_a, id_c );
+                asignaciones[i] = new Asignacion_alumno(id_a, id_c, fecha );
                 return true;
             }
         }
@@ -339,6 +340,10 @@ public class Gestor_alumno {
     public int get_id_al(int id) {
 
         return asignaciones[id].getId_alumno();
+    }
+    public String get_id_fecha(int id) {
+
+        return asignaciones[id].getFecha();
     }
 
     public int getCarnetAsig(int id) {

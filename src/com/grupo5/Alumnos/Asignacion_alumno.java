@@ -12,11 +12,12 @@ package com.grupo5.Alumnos;
 public class Asignacion_alumno {
     private int Id_alumno;
     private int Id_curso;
-
+private String fecha;
     
-    public Asignacion_alumno(int id_a, int id_c ){
+    public Asignacion_alumno(int id_a, int id_c, String f ){
         this.Id_alumno = id_a;
         this.Id_curso = id_c;
+        this.setFecha(f);
 
     }
 
@@ -49,4 +50,11 @@ public class Asignacion_alumno {
     }
 
 
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
 }

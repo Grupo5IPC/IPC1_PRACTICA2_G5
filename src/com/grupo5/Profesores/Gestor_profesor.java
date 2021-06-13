@@ -85,10 +85,10 @@ public class Gestor_profesor {
         }
     }
 
-    public boolean asginar_curso(int id_a, int id_c) {
+    public boolean asginar_curso(int id_a, int id_c, String fecha) {
         for (int i = 0; i < 30; i++) {
             if (asignaciones[i] == null) {
-                asignaciones[i] = new Asignacion_prof(id_a, id_c);
+                asignaciones[i] = new Asignacion_prof(id_a, id_c, fecha);
                 return true;
             }
         }
@@ -167,6 +167,9 @@ public class Gestor_profesor {
     public int get_id_curso(int id) {
 
         return asignaciones[id].getId_curso();
+    }
+    public String getFecha(int id){
+        return asignaciones[id].getFecha();
     }
 
     public int cantidad_filas_asig() {

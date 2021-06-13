@@ -3,6 +3,7 @@ package com.grupo5;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -397,7 +398,7 @@ public class Main {
                                         System.out.println("Inscripcion maxima alcanzada");
                                         break;
                                     } else {
-                                        gestor_alumno.asginar_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]));
+                                        gestor_alumno.asginar_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]), getFecha());
                                         asig_alum++;
                                     }
 
@@ -462,7 +463,7 @@ public class Main {
                                         System.out.println("Asignacion maxima alcanzada");
                                         break;
                                     } else {
-                                        gestor_profesor.asginar_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]));
+                                        gestor_profesor.asginar_curso(Integer.parseInt(col[0]), Integer.parseInt(col[1]), getFecha());
                                         asig_prof++;
                                     }
 
@@ -659,6 +660,7 @@ public class Main {
                 m[i][1] = String.valueOf(gestor_alumno.getNombre(i));
                 m[i][2] = String.valueOf(gestor_alumno.getGenero(i));
 
+
             }
             int menor;
 
@@ -701,7 +703,7 @@ public class Main {
         if (asig_alum > 0) {
             int filas = gestor_alumno.cantidad_filas();
 
-            String[][] m = new String[filas][4];
+            String[][] m = new String[filas][5];
             for (int i = 0; i < filas; i++) {
                 int id = gestor_alumno.get_id_al(i);
                 m[i][0] = String.valueOf(gestor_alumno.getCarnetAsig(id));
@@ -709,6 +711,7 @@ public class Main {
                 int idCurso = gestor_alumno.get_id_curso(i);
                 m[i][2] = String.valueOf(gestor_curso.buscarCodigo_clase(idCurso));
                 m[i][3] = gestor_curso.buscar_nombre_clase(idCurso);
+                m[i][4] = gestor_alumno.get_id_fecha(i);
             }
             int menor;
 
@@ -720,14 +723,17 @@ public class Main {
                         String tmp_n = m[i + 1][1];
                         int tmp_idc = Integer.parseInt(m[i + 1][2]);
                         String c = m[i + 1][3];
+                        String fecha_tmp = m[i + 1][4];
                         m[i + 1][0] = m[i][0];
                         m[i + 1][1] = m[i][1];
                         m[i + 1][2] = m[i][2];
                         m[i + 1][3] = m[i][3];
+                        m[i + 1][4] = m[i][4];
                         m[i][0] = String.valueOf(tmp);
                         m[i][1] = tmp_n;
                         m[i][2] = String.valueOf(tmp_idc);
                         m[i][3] = c;
+                        m[i][4] = fecha_tmp;
                     }
                 }
 
@@ -749,7 +755,7 @@ public class Main {
         if (asig_prof > 0) {
             int filas = gestor_profesor.cantidad_filas_asig();
 
-            String[][] m = new String[filas][4];
+            String[][] m = new String[filas][5];
             for (int i = 0; i < filas; i++) {
 
                 int id = gestor_profesor.get_id_prof(i);
@@ -758,6 +764,7 @@ public class Main {
                 int idCurso = gestor_alumno.get_id_curso(i);
                 m[i][2] = String.valueOf(gestor_curso.buscarCodigo_clase(idCurso));
                 m[i][3] = gestor_curso.buscar_nombre_clase(idCurso);
+                m[i][4] = gestor_profesor.getFecha(i);
             }
             int menor;
 
@@ -769,14 +776,17 @@ public class Main {
                         String tmp_n = m[i + 1][1];
                         int tmp_idc = Integer.parseInt(m[i + 1][2]);
                         String c = m[i + 1][3];
+                        String fecha =  m[i + 1][4];
                         m[i + 1][0] = m[i][0];
                         m[i + 1][1] = m[i][1];
                         m[i + 1][2] = m[i][2];
                         m[i + 1][3] = m[i][3];
+                        m[i + 1][4] = m[i][4];
                         m[i][0] = String.valueOf(tmp);
                         m[i][1] = tmp_n;
                         m[i][2] = String.valueOf(tmp_idc);
                         m[i][3] = c;
+                        m[i][4] = fecha;
                     }
                 }
 
@@ -980,6 +990,16 @@ public class Main {
     public static void printErrores(){
         System.out.println("----------------------------------------------------");
         System.out.println("Se produjeron excepciones durante este Proceso, verificar el registro ubicado en Log\\"+log.n_reporte+".txt");
+    }
+    public static String getFecha(){
+        String fech = "";
+        Calendar fecha = Calendar.getInstance();
+        int año = fecha.get(Calendar.YEAR);
+        int mes = fecha.get(Calendar.MONTH);
+        int dia = fecha.get(Calendar.DAY_OF_MONTH);
+
+        fech = dia + "/" + mes + "/" + año + " ";
+        return fech;
     }
 
 
