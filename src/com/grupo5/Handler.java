@@ -173,21 +173,29 @@ public class Handler {
 
         return state;
     }
-    public  boolean ComprobarFila_notas( String fila[]) {
+    public  boolean ComprobarFila_notas( String fila[], int cont2, int linea) {
         boolean state = true;
         int cont = 0;
+        if (cont2 == 0){
+
+            log.add_Titulo("\t Asignacion de  notas ");
+        }
         if (fila.length == 3){
             try{
                 if (verficarEntero(fila[0].toString()) != true ){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[0]+" \" ");
                     cont++;
                 }
                 if (verficarEntero(fila[1].toString()) != true){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el ID \""+fila[1]+" \" ");
                     cont++;
                 }
                 if (verficarDecimal(fila[2].toString()) != true){
+                    log.addCuerpo("Linea "+linea+": Error al convertir el numero \""+fila[2]+" \" ");
                     cont++;
                 }
                 if (verificarNota(fila[2].toString()) != true){
+                    log.addCuerpo("Linea "+linea+": La nota no esta dentro del rango\""+fila[2]+" \" ");
                     cont++;
                 }
 
@@ -200,7 +208,7 @@ public class Handler {
                 state = false;
             }
         }else{
-
+            log.addCuerpo("La asignacion de notas en la linea "+linea +" no se puedo efectuar, verifique que todos los campos sean correctos");
             state = false;
         }
         //System.out.println(state);
