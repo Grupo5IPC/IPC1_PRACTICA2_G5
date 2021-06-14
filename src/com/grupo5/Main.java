@@ -32,7 +32,6 @@ public class Main {
     public static Reportes reportes;
     public static Log log;
 
-
     public static void main(String[] args) {
         gestor_alumno = new Gestor_alumno();
         gestor_curso = new Gestor_curso();
@@ -47,7 +46,7 @@ public class Main {
     }
 
     public static void menuPrincipal() {
-       Scanner login = new Scanner(System.in);
+        Scanner login = new Scanner(System.in);
         Scanner MenuPrincipal = new Scanner(System.in);
         try {
             System.out.println("*******************************");
@@ -55,7 +54,7 @@ public class Main {
             System.out.println("*******************************");
             System.out.println("* Ingrese su usuario          *");
             String user = login.nextLine();
-            System.out.println("* Ingrese su contraseÃ±a       *");
+            System.out.println("* Ingrese su contraseña       *");
             String pass = login.nextLine();
             System.out.println("*******************************");
             int Opciones = 0;
@@ -63,7 +62,7 @@ public class Main {
                 do {
                     try {
                         System.out.println("*******************************");
-                        System.out.println("*       MENÃš PRINCIPAL        *");
+                        System.out.println("*       MENÚ PRINCIPAL        *");
                         System.out.println("*******************************");
                         System.out.println("* 1) Cargar Alumnos           *");
                         System.out.println("* 2) Cargar Profesores        *");
@@ -72,8 +71,9 @@ public class Main {
                         System.out.println("* 5) Asignar Profesores       *");
                         System.out.println("* 6) Cargar Notas             *");
                         System.out.println("* 7) Agregar Usuario          *");
-                        System.out.println("* 8) Cerrar sesion            *");
-                        System.out.println("* 9) Salir                    *");
+                        System.out.println("* 8) Seccion de Reportes      *");
+                        System.out.println("* 9) Cerrar sesion            *");
+                        System.out.println("* 10) Salir                    *");
                         System.out.println("*******************************");
                         System.out.print("Elige una opcion: ");
                         Opciones = MenuPrincipal.nextInt();
@@ -107,28 +107,80 @@ public class Main {
                                 break;
 
                             case 8:
+                                System.out.println("");
+                                System.out.println("**************Reportes***************");
+                                System.out.println("*************************************");
+                                System.out.println("* 1) Reporte de Alumnos             *");
+                                System.out.println("* 2) Reporte asignacion Alumnos     *");
+                                System.out.println("* 3) Reporte asignacion Profesores  *");
+                                System.out.println("* 4) Reporte General                *");
+                                System.out.println("* 5) Reporte Especifico             *");
+                                System.out.println("* 6) Top 5 Mejores Alumnos          *");
+                                System.out.println("* 7) Cerrar sesion                  *");
+                                System.out.println("* 8) Salir                          *");
+                                System.out.println("*************************************");
+                                Scanner sc = new Scanner(System.in);
+                                int option = sc.nextInt();
+                                switch (option) {
+                                    case 1:
+                                        repAlumnos();
+                                        break;
+
+                                    case 2:
+                                        repAsignacion_alumnos();
+                                        break;
+
+                                    case 3:
+                                        repAsignacion_profesores();
+                                        break;
+
+                                    case 4:
+                                        repCursos();
+                                        break;
+                                    case 5:
+                                        repCurso();
+                                        break;
+                                    case 6:
+                                        repTop5();
+                                        break;
+                                    case 7:
+                                        System.out.print("\033[H\033[2J");
+                                        System.out.flush();
+                                        menuPrincipal();
+                                        break;
+                                    case 8:
+                                        System.out.println("Has salido del programa");
+                                        break;
+
+                                    default:
+                                        System.out.println("Advertencia: Debes elegir una opción de 1 a x");
+                                        break;
+                                }
+                                break;
+
+                            case 9:
                                 System.out.print("\033[H\033[2J");
                                 System.out.flush();
                                 menuPrincipal();
                                 break;
-                            case 9:
+                            case 10:
                                 System.out.println("Has salido del programa");
                                 break;
 
                             default:
-                                System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
+                                System.out.println("Advertencia: Debes elegir una opción de 1 a x");
                                 break;
                         }
                     } catch (Exception e) {
                         MenuPrincipal = new Scanner(System.in);
-                        System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
+                        System.out.println("Advertencia: Debes elegir una opción de 1 a x");
                     }
                 } while (Opciones != 9);
             } else if (gestor_usuarios.verificar(user, pass)) {
                 do {
                     try {
                         System.out.println("*************************************");
-                        System.out.println("*           MENÃš DE REPORTES        *");
+                        System.out.println("*           MENÚ DE REPORTES        *");
                         System.out.println("*************************************");
                         System.out.println("* 1) Reporte de Alumnos             *");
                         System.out.println("* 2) Reporte asignacion Alumnos     *");
@@ -137,7 +189,7 @@ public class Main {
                         System.out.println("* 5) Reporte Especifico             *");
                         System.out.println("* 6) Top 5 Mejores Alumnos          *");
                         System.out.println("* 7) Cerrar sesion                  *");
-                        System.out.println("* 7) Salir                          *");
+                        System.out.println("* 8) Salir                          *");
                         System.out.println("*************************************");
                         System.out.print("Elige una opcion: ");
                         Opciones = MenuPrincipal.nextInt();
@@ -173,17 +225,17 @@ public class Main {
                                 break;
 
                             default:
-                                System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
+                                System.out.println("Advertencia: Debes elegir una opción de 1 a x");
                                 break;
                         }
                     } catch (Exception e) {
                         MenuPrincipal = new Scanner(System.in);
-                        System.out.println("Advertencia: Debes elegir una opciÃ³n de 1 a x");
+                        System.out.println("Advertencia: Debes elegir una opción de 1 a x");
                     }
                 } while (Opciones != 8);
             }
         } catch (Exception e) {
-            System.out.println("Has hecho una acciÃ³n no valida,");
+            System.out.println("Has hecho una acción no valida,");
             System.out.println("Ejecuta el programa nuevamente");
         }
     }
@@ -197,18 +249,18 @@ public class Main {
         System.out.println("* Ingrese el nuevo usuario    *");
         Scanner nombreUsuario = new Scanner(System.in);
         String nuser = nombreUsuario.nextLine();
-        System.out.println("* Ingrese una contraseÃ±a      *");
+        System.out.println("* Ingrese una contraseña      *");
         Scanner passUsuario = new Scanner(System.in);
         String npass = passUsuario.nextLine();
-        System.out.println("* Confirmar contraseÃ±a        *");
+        System.out.println("* Confirmar contraseña        *");
         Scanner confirmarPass = new Scanner(System.in);
         String npass2 = confirmarPass.nextLine();
         System.out.println("*******************************");
-        if ( npass.equals(npass2)) {
-            if (gestor_usuarios.verificar(nuser,npass) == false) {
+        if (npass.equals(npass2)) {
+            if (gestor_usuarios.verificar(nuser, npass) == false) {
                 gestor_usuarios.Ins_usu(nuser, npass);
                 System.out.println("\nAgregado corretamente \n");
-            }else{
+            } else {
                 System.out.println("El usuario ya existe, intentelo de nuevo");
             }
         } else {
@@ -219,7 +271,6 @@ public class Main {
 
     //----------------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------------
-
     public static void C_alumnos() {
         String aux = Log;
         int cont = 0;
@@ -233,8 +284,7 @@ public class Main {
                 for (int i = 0; i < filas.length; i++) {
                     col = filas[i].split(",");
                     if (!verificaciones.ComprobarFila_Alumno(filas[i].split(","), cont, i)) {
-                        if (cont == 0){
-
+                        if (cont == 0) {
 
                             cont++;
                         }
@@ -254,20 +304,18 @@ public class Main {
                             alum++;
                         }
                     } else {
-                        log.addCuerpo("El Carnet o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentra registrado");
+                        log.addCuerpo("El Carnet o ID ingresado: " + col[1] + ", " + col[0] + " ya se encuentra registrado");
                     }
                 }
-                if (cont>0){
+                if (cont > 0) {
                     printErrores();
                 }
                 gestor_alumno.print_alumnos();
-
 
             } catch (Exception e) {
                 System.out.println("Hubo un error" + e);
 
             }
-
 
         }
     }
@@ -283,9 +331,8 @@ public class Main {
 
                 for (int i = 1; i < filas.length; i++) {
                     col = filas[i].split(",");
-                    if (!verificaciones.ComprobarFilaprofesor(filas[i].split(","), cont , i)) {
-                        if (cont == 0){
-
+                    if (!verificaciones.ComprobarFilaprofesor(filas[i].split(","), cont, i)) {
+                        if (cont == 0) {
 
                             cont++;
                         }
@@ -304,20 +351,18 @@ public class Main {
                             profs++;
                         }
                     } else {
-                        log.addCuerpo("El Registro o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentra registrado, no se ha podido cargar ");
+                        log.addCuerpo("El Registro o ID ingresado: " + col[1] + ", " + col[0] + " ya se encuentra registrado, no se ha podido cargar ");
                     }
                 }
-                if (cont>0){
+                if (cont > 0) {
                     printErrores();
                 }
                 gestor_profesor.print_profesores();
-
 
             } catch (Exception e) {
                 System.out.println("Hubo un error" + e);
 
             }
-
 
         }
     }
@@ -333,9 +378,9 @@ public class Main {
 
                 for (int i = 1; i < filas.length; i++) {
                     col = filas[i].split(",");
-                    if (!verificaciones.ComprobarFila_curso(filas[i].split(","), cont , i)) {
+                    if (!verificaciones.ComprobarFila_curso(filas[i].split(","), cont, i)) {
                         //System.out.println("pasa");
-                        if (cont == 0){
+                        if (cont == 0) {
                             cont++;
                         }
                         continue;
@@ -352,27 +397,25 @@ public class Main {
 
                         }
                     } else {
-                        log.addCuerpo("El Codigo o ID ingresado: "+col[1]+", "+col[0]+" ya se encuentran registrado, no se ha podido cargar ");
+                        log.addCuerpo("El Codigo o ID ingresado: " + col[1] + ", " + col[0] + " ya se encuentran registrado, no se ha podido cargar ");
                     }
                 }
-                if (cont>0){
+                if (cont > 0) {
                     printErrores();
                 }
                 gestor_curso.print_cursos();
-
 
             } catch (Exception e) {
                 System.out.println("Hubo un error" + e);
 
             }
 
-
         }
     }
 
     public static void A_alumnos() {
         int cont = 0;
-        String cadena ="";
+        String cadena = "";
         String ids = "";
         if (curs > 0 && alum > 0) {
             if (gestor_alumno.cantidad_filas() == 199) {
@@ -384,9 +427,9 @@ public class Main {
                     String col[] = filas[0].split(",");
                     for (int i = 1; i < filas.length; i++) {
                         col = filas[i].split(",");
-                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","), 1,cont, i)) {
-                            if (cont == 0){
-                                cont ++;
+                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","), 1, cont, i)) {
+                            if (cont == 0) {
+                                cont++;
                             }
                             //System.out.println("pasa");
                             continue;
@@ -403,27 +446,27 @@ public class Main {
                                     }
 
                                 } else {
-                                    cadena += col[0] +","+col[1];
+                                    cadena += col[0] + "," + col[1];
                                 }
                             } else {
-                                ids += col[0] +"," + col[1];
-                                log.addCuerpo("EL curso con ID "+ col[1]+" no existe, el alumno con ID "+ col[0]+" no se asigno");
+                                ids += col[0] + "," + col[1];
+                                log.addCuerpo("EL curso con ID " + col[1] + " no existe, el alumno con ID " + col[0] + " no se asigno");
                             }
 
                         } else {
-                            ids += col[0] +"," + col[1];
-                            log.addCuerpo("EL alumno con ID "+ col[0]+", no existe, no se realizo asignacion a "+ col[1]);
+                            ids += col[0] + "," + col[1];
+                            log.addCuerpo("EL alumno con ID " + col[0] + ", no existe, no se realizo asignacion a " + col[1]);
                         }
                     }
-                    if (!ids.equals("")){
+                    if (!ids.equals("")) {
                         System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo: ");
                         System.out.println(ids);
                     }
-                    if (!cadena.equals("")){
+                    if (!cadena.equals("")) {
                         System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque ya se encontraban realizadas: ");
                         System.out.println(cadena);
                     }
-                    if (cont>0){
+                    if (cont > 0) {
                         printErrores();
                     }
 
@@ -437,7 +480,7 @@ public class Main {
 
     public static void A_profesores() {
         int cont = 0;
-        String cadena ="";
+        String cadena = "";
         String ids = "";
         if (profs > 0 && curs > 0) {
             if (gestor_profesor.cantidad_filas_asig() == 29) {
@@ -449,10 +492,10 @@ public class Main {
                     String col[] = filas[0].split(",");
                     for (int i = 1; i < filas.length; i++) {
                         col = filas[i].split(",");
-                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","),2,cont,i)) {
+                        if (!verificaciones.ComprobarFila_asignacion(filas[i].split(","), 2, cont, i)) {
                             //System.out.println("pasa");
-                            if (cont == 0){
-                                cont ++;
+                            if (cont == 0) {
+                                cont++;
                             }
                             continue;
                         }
@@ -468,27 +511,27 @@ public class Main {
                                     }
 
                                 } else {
-                                    cadena += col[0] +","+col[1];
+                                    cadena += col[0] + "," + col[1];
                                 }
                             } else {
-                                ids += col[0] +"," + col[1];
-                                log.addCuerpo("EL curso con ID "+ col[1]+" no existe, el profesor con ID "+ col[0]+" no se asigno");
+                                ids += col[0] + "," + col[1];
+                                log.addCuerpo("EL curso con ID " + col[1] + " no existe, el profesor con ID " + col[0] + " no se asigno");
                             }
 
                         } else {
-                            ids += col[0] +"," + col[1];
-                            log.addCuerpo("EL profesor con ID "+ col[0]+", no existe, no se realizo asignacion a "+ col[1]);
+                            ids += col[0] + "," + col[1];
+                            log.addCuerpo("EL profesor con ID " + col[0] + ", no existe, no se realizo asignacion a " + col[1]);
                         }
                     }
-                    if (!ids.equals("")){
+                    if (!ids.equals("")) {
                         System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo: ");
                         System.out.println(ids);
                     }
-                    if (!cadena.equals("")){
+                    if (!cadena.equals("")) {
                         System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque ya se encontraban realizadas: ");
                         System.out.println(cadena);
                     }
-                    if (cont>0){
+                    if (cont > 0) {
                         printErrores();
                     }
 
@@ -515,7 +558,7 @@ public class Main {
                         col = filas[i].split(",");
                         if (!verificaciones.ComprobarFila_notas(filas[i].split(","), cont, i)) {
                             //System.out.println("pasa");
-                            if (cont == 0){
+                            if (cont == 0) {
                                 cont++;
                             }
                             continue;
@@ -533,25 +576,25 @@ public class Main {
                                 }
 
                             } else {
-                                cadena += col[0] + ", "+ col[1]+", "+col[2] +"\n";
+                                cadena += col[0] + ", " + col[1] + ", " + col[2] + "\n";
                             }
-                        }else{
-                            ids += col[0] + ", "+ col[1]+", "+col[2] +"\n";
-                            log.addCuerpo("EL alumno con ID "+ col[0]+", no esta asignado a "+col[1]);
+                        } else {
+                            ids += col[0] + ", " + col[1] + ", " + col[2] + "\n";
+                            log.addCuerpo("EL alumno con ID " + col[0] + ", no esta asignado a " + col[1]);
 
                         }
 
                     }
-                    if (!ids.equals("")){
+                    if (!ids.equals("")) {
                         System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque los alumnos no estan asignados: ");
                         System.out.println(ids);
 
                     }
-                    if (!cadena.equals("")){
+                    if (!cadena.equals("")) {
                         System.out.println("Las siguientes asignaciones no se pudieron llevar a cabo, porque los alumnos ya tienen nota ingresada: ");
                         System.out.println(ids);
                     }
-                    if (cont>0){
+                    if (cont > 0) {
                         printErrores();
                     }
                     gestor_alumno.printNota();
@@ -563,6 +606,7 @@ public class Main {
         }
 
     }
+
     public static String getContentOfFile(String pathname) {
         File archive = null;
         FileReader fr = null;
@@ -593,7 +637,7 @@ public class Main {
                     fr.close();
                 }
             } catch (NullPointerException e) {
-                System.out.println("No ha seleccionado ningÃºn archivo");
+                System.out.println("No ha seleccionado ningún archivo");
             } catch (Exception e) {
                 System.out.println();
             }
@@ -605,7 +649,6 @@ public class Main {
 
         String filas[];
 
-
         System.out.println("*         Ingrese la ruta de la lista de alumnos   *");
         Scanner ruta = new Scanner(System.in);
         String auxi = ruta.next();
@@ -613,7 +656,6 @@ public class Main {
         String prueba = getContentOfFile(auxi);
         prueba.trim(); //QUITAMOS LOS ESPACIOS
         String s = prueba.trim();
-
 
         filas = s.split("\n");
 
@@ -627,29 +669,26 @@ public class Main {
             String[] columnas = filas[i].split(",");
             String cola = columnas[0].trim() + ",";
 
-
             for (int j = 0; j < columnas.length; j++) {
                 String col = columnas[j].trim() + ",";
 
                 if (j != 2) {
                     aux[i] += col;
 
-                } else aux[i] += col;
+                } else {
+                    aux[i] += col;
+                }
 
             }
 
         }
 
-
-
         //System.out.println(filas[1]);
         return aux;
-
 
     }
 
     // REPORTES
-
     public static void repAlumnos() {
         if (alum > 0) {
             int filas = gestor_alumno.verificar_cant();
@@ -659,7 +698,6 @@ public class Main {
                 m[i][0] = String.valueOf(gestor_alumno.getCarnet(i));
                 m[i][1] = String.valueOf(gestor_alumno.getNombre(i));
                 m[i][2] = String.valueOf(gestor_alumno.getGenero(i));
-
 
             }
             int menor;
@@ -776,7 +814,7 @@ public class Main {
                         String tmp_n = m[i + 1][1];
                         int tmp_idc = Integer.parseInt(m[i + 1][2]);
                         String c = m[i + 1][3];
-                        String fecha =  m[i + 1][4];
+                        String fecha = m[i + 1][4];
                         m[i + 1][0] = m[i][0];
                         m[i + 1][1] = m[i][1];
                         m[i + 1][2] = m[i][2];
@@ -867,7 +905,6 @@ public class Main {
             if (gestor_curso.verificar_curso_id(or) == false) {
                 encabezado += "Curso " + gestor_curso.buscar_nombre_clase(or) + "<br>Impartido por:";
 
-
                 if (asig_prof > 0) {
                     int[] ids = gestor_profesor.cant_getIdprof_curso(or);
                     for (int i = 0; i < ids.length; i++) {
@@ -875,9 +912,7 @@ public class Main {
                         encabezado += " Registro: " + String.valueOf(gestor_profesor.buscar_Registro_prof(ids[i])) + ", ";
                     }
 
-
                 }
-
 
                 int ids[] = gestor_alumno.getIds_encurso(or);
                 String m[][] = new String[ids.length][4];
@@ -895,7 +930,6 @@ public class Main {
                     }
 
                 }
-
 
                 for (int i = 0; i < m.length; i++) {
                     for (int j = 0; j < m[0].length; j++) {
@@ -928,7 +962,6 @@ public class Main {
                 int id = gestor_curso.buscarId_clase(or);
                 encabezado += "Curso " + gestor_curso.buscar_nombre_clase(id) + "<br>Impartido por:";
 
-
                 if (asig_prof > 0) {
                     int[] ids = gestor_profesor.cant_getIdprof_curso(id);
                     for (int i = 0; i < ids.length; i++) {
@@ -936,9 +969,7 @@ public class Main {
                         encabezado += " Registro: " + String.valueOf(gestor_profesor.buscar_Registro_prof(ids[i])) + ", ";
                     }
 
-
                 }
-
 
                 int ids[] = gestor_alumno.getIds_encurso(or);
                 String m[][] = new String[ids.length][3];
@@ -948,7 +979,6 @@ public class Main {
                     m[i][1] = gestor_alumno.buscar_nombre_alumn(ids[i]);
 
                     m[i][2] = String.valueOf(gestor_alumno.buscarNota(ids[i], or));
-
 
                 }
                 for (int x = 0; x < m.length; x++) {
@@ -970,7 +1000,6 @@ public class Main {
 
                 }
 
-
                 for (int i = 0; i < m.length; i++) {
                     for (int j = 0; j < m[0].length; j++) {
                         System.out.print(m[i][j] + ",");
@@ -987,20 +1016,22 @@ public class Main {
         } while (sta == false);
 
     }
-    public static void printErrores(){
+
+    public static void printErrores() {
         System.out.println("----------------------------------------------------");
-        System.out.println("Se produjeron excepciones durante este Proceso, verificar el registro ubicado en Log\\"+log.n_reporte+".txt");
+        System.out.println("Se produjeron excepciones durante este Proceso, verificar el registro ubicado en Log\\" + log.n_reporte + ".txt");
     }
-    public static String getFecha(){
+
+    public static String getFecha() {
         String fech = "";
         Calendar fecha = Calendar.getInstance();
-        int aÃ±o = fecha.get(Calendar.YEAR);
+        int año = fecha.get(Calendar.YEAR);
         int mes = fecha.get(Calendar.MONTH);
         int dia = fecha.get(Calendar.DAY_OF_MONTH);
 
-        fech = dia + "/" + mes + "/" + aÃ±o + " ";
+        fech = dia + "/" + mes + "/" + año + " ";
         return fech;
     }
 
-
+    
 }
